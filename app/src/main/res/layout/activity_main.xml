@@ -7,6 +7,78 @@
     android:background="@drawable/blur_bg"
     tools:context=".activity.MainActivity">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"
+                android:textStyle="italic|bold"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp">
+
+                <com.blagro.utilities.CircleImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/default_circle"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_gravity="center"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="My Profile"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="10sp"
+                        android:textStyle="italic"
+                        android:gravity="center_vertical"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:padding="2dp"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+        </android.support.v7.widget.Toolbar>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/layout_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
     <TextView
         android:id="@+id/txt_cicrle"
         android:layout_width="100dp"
@@ -30,11 +102,13 @@
         android:textColor="@color/colorSkyBue"
         android:textStyle="bold|italic" />
 
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/txt_create"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txt_cicrle"
+        android:layout_below="@id/layout_circle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="5dp"
@@ -44,65 +118,118 @@
         android:textSize="14sp"
         android:textStyle="bold|italic" />
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/layout_retailerList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_margin="10dp"
-        android:layout_above="@id/txt_cicrle"
+        android:layout_above="@id/layout_circle"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/drawable_roundable_login"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Retailer List"
-        android:textColor="@color/colorSkyBue"
-        android:textSize="14sp"
-        android:textStyle="bold|italic" />
+        android:layout_margin="10dp"
+        android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@drawable/list" />
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Retailer List"
+            android:textColor="@color/colorSkyBue"
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_distributorrList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/txt_cicrle"
-        android:layout_alignRight="@id/txt_cicrle"
+        android:layout_above="@id/layout_circle"
+        android:layout_alignRight="@id/layout_circle"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
-        android:background="@drawable/drawable_roundable_login"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Distributor List"
-        android:textColor="@color/colorSkyBue"
-        android:textSize="14sp"
-        android:textStyle="bold|italic" />
+        android:orientation="vertical">
 
-    <TextView
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@drawable/list_distributor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Distributor List"
+            android:textColor="@color/colorSkyBue"
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_distributor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@id/txt_create"
+        android:layout_alignRight="@id/layout_circle"
         android:layout_alignBottom="@id/txt_create"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
-        android:background="@drawable/drawable_roundable_login"
+        android:orientation="vertical"
+        android:layout_centerVertical="true">
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:src="@drawable/distributor" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="10dp"
+        android:layout_gravity="center"
         android:text="Distributors"
-        android:textColor="@color/colorSkyBue"
+        android:textColor="@color/colorWhite"
         android:textSize="14sp"
         android:textStyle="bold|italic" />
 
-    <TextView
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_retailer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/txt_create"
+        android:layout_margin="10dp"
         android:layout_alignBottom="@id/txt_create"
         android:layout_alignParentLeft="true"
-        android:layout_margin="10dp"
-        android:background="@drawable/drawable_roundable_login"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Retailers"
-        android:textColor="@color/colorSkyBue"
-        android:textSize="14sp"
-        android:textStyle="bold|italic" />
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:src="@drawable/retailer" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Retailers"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
+
+
+    </LinearLayout>
 
 
 </RelativeLayout>

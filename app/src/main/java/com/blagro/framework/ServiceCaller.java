@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 /**
  * Created by lalit on 7/25/2017.
  */
@@ -34,7 +33,7 @@ public class ServiceCaller {
         this.context = context;
     }
 
-//    //call login data
+    //    //call login data
     public void callLoginService(final String phone, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final String url = Contants.SERVICE_BASE_URL + Contants.Login;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -61,7 +60,7 @@ public class ServiceCaller {
     }
 
 
-    public void callRetailerListService(final IAsyncWorkCompletedCallback workCompletedCallback) {
+    public void callCityListService(final IAsyncWorkCompletedCallback workCompletedCallback) {
         final String url = "http://blapi2.veteransoftwares.com/api/city";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -77,6 +76,43 @@ public class ServiceCaller {
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
+
+
+    public void callCateorygListService(final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/category";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                workCompletedCallback.onDone(response, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                workCompletedCallback.onDone(error.getMessage(), false);
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
+    }
+
+
+    public void callProductListService(final String category, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/product?category="+category;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                workCompletedCallback.onDone(response, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                workCompletedCallback.onDone(error.getMessage(), false);
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
+    }
+
 //
 ////        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 ////            @Override

@@ -4,9 +4,12 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#fff</color>
+    <color name="colorRed">#EE0A14</color>
     <color name="colorBase">#FFA795</color>
     <color name="colorBaseDark">#F77E68</color>
     <color name="colorBlack">#000</color>
     <color name="colorSkyBue">#365FB1</color>
     <color name="colorLightSkyBule">#DC365FB1</color>
+    <color name="shop_name">#2f5c8f</color>
+
 </resources>

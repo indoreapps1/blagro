@@ -46,7 +46,7 @@ public class DistributorListActivity extends AppCompatActivity {
             progressDialog.setMessage("Fetching Cities...");
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(DistributorListActivity.this);
-            serviceCaller.callRetailerListService(new IAsyncWorkCompletedCallback() {
+            serviceCaller.callCityListService(new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();

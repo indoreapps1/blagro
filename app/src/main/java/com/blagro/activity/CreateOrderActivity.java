@@ -1,11 +1,13 @@
 package com.blagro.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,11 +31,12 @@ public class CreateOrderActivity extends AppCompatActivity {
 
     Spinner spinner_city, spinner_area, spinner_category;
     ArrayList<String> cityArrayList, categoryArrayList;
-    List<MyPojo> cityPojoList, cateoryPojoList;
+    List<MyPojo> cityPojoList, cateoryPojoList, productPojoList;
     ArrayAdapter<String> arrayCityAdapter, arrayCetoryAdapter;
     RecyclerView product_recycle;
     TextView cart_dot;
     ProductAdapter productAdapter;
+    String selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,26 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinner_category = findViewById(R.id.spinner_category);
         product_recycle = findViewById(R.id.product_recycle);
         cart_dot = findViewById(R.id.cart_dot);
+        productPojoList = new ArrayList<>();
         product_recycle.setLayoutManager(new LinearLayoutManager(this));
         setCitySpinnerData();
         setCategorySpinnerData();
+        spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                selectedCategory = parent.getItemAtPosition(position).toString();
+                selectedCategory = spinner_category.getItemAtPosition(spinner_category.getSelectedItemPosition()).toString();
+//                Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        setProductList();
+
     }
 
     private void setCitySpinnerData() {
@@ -111,6 +131,17 @@ public class CreateOrderActivity extends AppCompatActivity {
                                 if (categoryArrayList != null && categoryArrayList.size() != 0) {
                                     arrayCetoryAdapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
                                     spinner_category.setAdapter(arrayCetoryAdapter);
+//                                    spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                                        @Override
+//                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                                            selectedCategory = parent.getItemAtPosition(position).toString();
+//                                        }
+//
+//                                        @Override
+//                                        public void onNothingSelected(AdapterView<?> parent) {
+//
+//                                        }
+//                                    });
                                 }
                             }
                         } else {
@@ -143,7 +174,25 @@ public class CreateOrderActivity extends AppCompatActivity {
     private void setProductList() {
         if (Utility.isOnline(this)) {
             ServiceCaller serviceCaller = new ServiceCaller(this);
-//            serviceCaller.callProductListService();
+            serviceCaller.callProductListService(selectedCategory, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
+                    if (isComplete) {
+                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                        if (myPojos != null) {
+                            productPojoList.addAll(Arrays.asList(myPojos));
+                            if (productPojoList != null) {
+                                productAdapter = new ProductAdapter(CreateOrderActivity.this, productPojoList);
+                                product_recycle.setAdapter(productAdapter);
+                            }
+                        }
+
+                    } else {
+                        Toast.makeText(CreateOrderActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
 
         } else {

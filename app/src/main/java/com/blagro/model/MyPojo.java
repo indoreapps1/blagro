@@ -30,7 +30,7 @@ public class MyPojo {
 
     private String item_code;
 
-    private int unit;
+    private String unit;
 
     private String name;
 
@@ -58,12 +58,12 @@ public class MyPojo {
         this.item_code = item_code;
     }
 
-    public int getUnit ()
+    public String getUnit ()
     {
         return unit;
     }
 
-    public void setUnit (int unit)
+    public void setUnit (String unit)
     {
         this.unit = unit;
     }

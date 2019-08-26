@@ -83,18 +83,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         DbHelper dbHelper = new DbHelper(context);
         MyPojo myBasket = new MyPojo();
         myBasket.setName(myPojoList.get(position).getName());
-        myBasket.setUnit(myPojoList.get(position).getCountValue());
-//        myBasket.setMc_name(FilteruserList.get(position).getMc_name());
-//        myBasket.setProduct_name(FilteruserList.get(position).getProduct_name());
-//        myBasket.setProduct_subtitle(FilteruserList.get(position).getProduct_subtitle());
-//        myBasket.setProduct_mrp(FilteruserList.get(position).getProduct_mrp());
-//        myBasket.setProduct_dis(FilteruserList.get(position).getProduct_dis());
+//        myBasket.setUnit(myPojoList.get(position).getCountValue());
 //        myBasket.setQuantity(FilteruserList.get(position).getCountValue());
-//        myBasket.setProduct_details(FilteruserList.get(position).getProduct_details());
-//        myBasket.setPic(FilteruserList.get(position).getPic());
-//        myBasket.setP_qty(FilteruserList.get(position).getP_qty());
-//        myBasket.setIsoutofstock(FilteruserList.get(position).getIsoutofstock());
-//        myBasket.setProduct_comp_name(FilteruserList.get(position).getProduct_comp_name());
 
 //        if (categoryName != null && !categoryName.equals("")) {
 //            myBasket.setCategoryName(categoryName);

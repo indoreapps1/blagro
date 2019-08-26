@@ -334,7 +334,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private void populateBasketOrderData(Cursor cursor, MyPojo ob) {
         ob.setId(cursor.getInt(0));
         ob.setName(cursor.getString(1));
-        ob.setUnit(cursor.getInt(2));
+//        ob.setUnit(cursor.getInt(2));
     }
 
     //show  Basket Order list data

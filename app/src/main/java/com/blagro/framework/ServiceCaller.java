@@ -97,7 +97,7 @@ public class ServiceCaller {
 
 
     public void callProductListService(final String category, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/product?category="+category;
+        final String url = "http://blapi2.veteransoftwares.com/api/product?category=" + category;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

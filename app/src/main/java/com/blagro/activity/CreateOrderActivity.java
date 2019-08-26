@@ -55,9 +55,9 @@ public class CreateOrderActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                selectedCategory = parent.getItemAtPosition(position).toString();
-                selectedCategory = spinner_category.getItemAtPosition(spinner_category.getSelectedItemPosition()).toString();
-//                Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
-
+                selectedCategory = parent.getSelectedItem().toString();
+                Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
+                setProductList();
             }
 
             @Override
@@ -65,7 +65,6 @@ public class CreateOrderActivity extends AppCompatActivity {
 
             }
         });
-        setProductList();
 
     }
 
@@ -177,7 +176,7 @@ public class CreateOrderActivity extends AppCompatActivity {
             serviceCaller.callProductListService(selectedCategory, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
-                    Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateOrderActivity.this, workName, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
                         MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                         if (myPojos != null) {

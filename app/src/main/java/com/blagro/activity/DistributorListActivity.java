@@ -34,8 +34,7 @@ public class DistributorListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_distributor_list);
         recycle_distributorList = findViewById(R.id.recycle_distributorList);
         spinner_city = findViewById(R.id.spinner_city);
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, setSpinnerData());
-        spinner_city.setAdapter(arrayAdapter);
+        setSpinnerData();
     }
 
     private List<String> setSpinnerData() {
@@ -53,14 +52,18 @@ public class DistributorListActivity extends AppCompatActivity {
 //                    Toast.makeText(RetailerListActivity.this, workName, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
                         MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null){
+                        if (myPojos != null) {
                             myPojoList.addAll(Arrays.asList(myPojos));
-                            if (myPojoList!=null && myPojoList.size()>0){
-                                for (MyPojo pojo:myPojoList){
+                            if (myPojoList != null && myPojoList.size() > 0) {
+                                for (MyPojo pojo : myPojoList) {
                                     arrayList.addAll(Arrays.asList(pojo.getCity()));
                                 }
+                                if (arrayList != null && arrayList.size() > 0) {
+                                    arrayAdapter = new ArrayAdapter(DistributorListActivity.this, android.R.layout.simple_list_item_1, arrayList);
+                                    spinner_city.setAdapter(arrayAdapter);
+                                }
                             }
-                        }else {
+                        } else {
                             Toast.makeText(DistributorListActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                         }
 

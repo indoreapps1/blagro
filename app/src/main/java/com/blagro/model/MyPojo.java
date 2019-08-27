@@ -108,4 +108,13 @@ public class MyPojo {
         this.countValue = countValue;
     }
 
+    private int quant;
+
+    public int getQuant() {
+        return quant;
+    }
+
+    public void setQuant(int quant) {
+        this.quant = quant;
+    }
 }

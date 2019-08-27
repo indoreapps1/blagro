@@ -2,6 +2,7 @@ package com.blagro.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +35,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     List<MyPojo> cityPojoList, cateoryPojoList, productPojoList;
     ArrayAdapter<String> arrayCityAdapter, arrayCetoryAdapter;
     RecyclerView product_recycle;
-    TextView cart_dot;
+    TextView cart_dot, txt_cart, tv_proceed;
     ProductAdapter productAdapter;
     String selectedCategory;
 
@@ -47,6 +48,8 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinner_category = findViewById(R.id.spinner_category);
         product_recycle = findViewById(R.id.product_recycle);
         cart_dot = findViewById(R.id.cart_dot);
+        txt_cart = findViewById(R.id.txt_cart);
+        tv_proceed = findViewById(R.id.tv_proceed);
         productPojoList = new ArrayList<>();
         product_recycle.setLayoutManager(new LinearLayoutManager(this));
         setCitySpinnerData();
@@ -66,7 +69,18 @@ public class CreateOrderActivity extends AppCompatActivity {
             }
         });
 
+        setItemCart();
+
+        tv_proceed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(CreateOrderActivity.this, BasketActivity.class);
+                startActivity(intent);
+            }
+        });
     }
+
+
 
     private void setCitySpinnerData() {
         cityArrayList = new ArrayList<String>();
@@ -176,7 +190,7 @@ public class CreateOrderActivity extends AppCompatActivity {
             serviceCaller.callProductListService(selectedCategory, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
-                    Toast.makeText(CreateOrderActivity.this, workName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
                         MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                         if (myPojos != null) {

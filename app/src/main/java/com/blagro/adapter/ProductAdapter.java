@@ -3,6 +3,7 @@ package com.blagro.adapter;
 import android.content.Context;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +22,15 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
     Context context;
     List<MyPojo> myPojoList;
+    private ProductItemActionListener actionListener;
 
     public ProductAdapter(Context context, List<MyPojo> myPojoList) {
         this.context = context;
         this.myPojoList = myPojoList;
+    }
+
+    public void setActionListener(ProductItemActionListener actionListener) {
+        this.actionListener = actionListener;
     }
 
     @NonNull
@@ -36,11 +42,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final ProductAdapter.MyViewHolder myViewHolder, final int i) {
-        myViewHolder.productTitle.setText(myPojoList.get(i).getName());
+        myViewHolder.productTitle.setText(myPojoList.get(i).getName() + " (" + myPojoList.get(i).getUnit() + ")");
+        myViewHolder.producGst.setText("GST- "+myPojoList.get(i).getGst());
         if (myPojoList.get(i).getCountValue() != 0) {
-            myViewHolder.textView_nos.setText(""+myPojoList.get(i).getCountValue());
+            myViewHolder.textView_nos.setText("" + myPojoList.get(i).getCountValue());
         }
-            myViewHolder.increase_Product.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.increase_Product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int count1 = (int) myPojoList.get(i).getCountValue();
@@ -66,7 +73,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             public void onClick(View view) {
                 final CreateOrderActivity rootActivity = (CreateOrderActivity) context;
                 if (rootActivity != null) {
-                    addItemToCart(i);
+                    if (actionListener != null)
+                        actionListener.onItemTap(myViewHolder.card_view);
+                        addItemToCart(i);
                     Vibrator vb = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                     assert vb != null;
                     vb.vibrate(20);
@@ -83,6 +92,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         DbHelper dbHelper = new DbHelper(context);
         MyPojo myBasket = new MyPojo();
         myBasket.setName(myPojoList.get(position).getName());
+        myBasket.setUnit(myPojoList.get(position).getUnit());
+        myBasket.setQuant(myPojoList.get(position).getCountValue());
 //        myBasket.setUnit(myPojoList.get(position).getCountValue());
 //        myBasket.setQuantity(FilteruserList.get(position).getCountValue());
 
@@ -107,21 +118,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 //    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView productTitle, decrement_Product, textView_nos, increase_Product, textView_addToCart;
+        TextView productTitle, decrement_Product, textView_nos, increase_Product, textView_addToCart, producGst;
+        CardView card_view;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            productTitle=itemView.findViewById(R.id.productTitle);
-            decrement_Product=itemView.findViewById(R.id.decrement_Product);
-            decrement_Product=itemView.findViewById(R.id.decrement_Product);
-            textView_nos=itemView.findViewById(R.id.textView_nos);
-            increase_Product=itemView.findViewById(R.id.increase_Product);
-            textView_addToCart=itemView.findViewById(R.id.textView_addToCart);
+            productTitle = itemView.findViewById(R.id.productTitle);
+            decrement_Product = itemView.findViewById(R.id.decrement_Product);
+            decrement_Product = itemView.findViewById(R.id.decrement_Product);
+            textView_nos = itemView.findViewById(R.id.textView_nos);
+            increase_Product = itemView.findViewById(R.id.increase_Product);
+            textView_addToCart = itemView.findViewById(R.id.textView_addToCart);
+            card_view = itemView.findViewById(R.id.card_view);
+            producGst = itemView.findViewById(R.id.producGst);
         }
     }
 
 
     public interface ProductItemActionListener {
-        void onItemTap(ImageView imageView);
+        void onItemTap(CardView cardView);
     }
 
 }

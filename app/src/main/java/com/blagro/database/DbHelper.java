@@ -54,7 +54,7 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_user_TABLE);
         String CREATE_city_TABLE = "CREATE TABLE cityData(cityId INTEGER,cityName TEXT,shippingCharge REAL)";
         db.execSQL(CREATE_city_TABLE);
-        String CREATE_MyOrder_TABLE = "CREATE TABLE MyOrderDataEntity(id INTEGER,  product_name TEXT, Quantity REAL)";
+        String CREATE_MyOrder_TABLE = "CREATE TABLE MyOrderDataEntity(id INTEGER,  product_name TEXT, product_unit TEXT, product_gst TEXT, category TEXT, Quantity REAL)";
         db.execSQL(CREATE_MyOrder_TABLE);
         String searchProductEntity = "CREATE TABLE searchProductEntity(ProductId INTEGER,ProductName TEXT,UnitPrice REAL,Discount REAL,ProductDetails TEXT,CategoryId INTEGER,ProductPicturesUrl TEXT,ProductSubTitle TEXT)";
         db.execSQL(searchProductEntity);
@@ -334,6 +334,10 @@ public class DbHelper extends SQLiteOpenHelper {
     private void populateBasketOrderData(Cursor cursor, MyPojo ob) {
         ob.setId(cursor.getInt(0));
         ob.setName(cursor.getString(1));
+        ob.setUnit(cursor.getString(2));
+        ob.setGst(cursor.getString(3));
+        ob.setCategory(cursor.getString(4));
+        ob.setQuant(cursor.getInt(5));
 //        ob.setUnit(cursor.getInt(2));
     }
 
@@ -359,9 +363,9 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     //show  Basket Order list data
-    public List<MyPojo> GetAllBasketOrderDataBasedOnCategoryName(String mc_name) {
+    public List<MyPojo> GetAllBasketOrderDataBasedOnCategoryName(String category) {
         ArrayList<MyPojo> list = new ArrayList<MyPojo>();
-        String query = "Select * FROM MyOrderDataEntity WHERE mc_name= '" + mc_name + "'";
+        String query = "Select * FROM MyOrderDataEntity WHERE category= '" + category + "'";
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -412,7 +416,10 @@ public class DbHelper extends SQLiteOpenHelper {
     private void populateBasketOrderValue(MyPojo ob, ContentValues values) {
         values.put("id", ob.getId());
         values.put("product_name", ob.getName());
-        values.put("Quantity", ob.getUnit());
+        values.put("product_unit", ob.getUnit());
+        values.put("product_gst", ob.getGst());
+        values.put("category", ob.getCategory());
+        values.put("Quantity", ob.getQuant());
 
     }
 
@@ -440,10 +447,10 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     // delete Basket Order Data By category Id ...........
-    public boolean deleteBasketOrderDataByCategoryName(String mc_name) {
+    public boolean deleteBasketOrderDataByCategoryName(String category) {
         boolean result = false;
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "mc_name = '" + mc_name + "'";
+        String query = "category = '" + category + "'";
         db.delete("MyOrderDataEntity", query, null);
         db.close();
         return result;

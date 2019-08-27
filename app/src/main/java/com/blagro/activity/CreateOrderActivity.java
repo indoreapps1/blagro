@@ -81,7 +81,6 @@ public class CreateOrderActivity extends AppCompatActivity {
     }
 
 
-
     private void setCitySpinnerData() {
         cityArrayList = new ArrayList<String>();
         cityPojoList = new ArrayList<MyPojo>();

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blagro.R;
 import com.blagro.activity.CreateOrderActivity;
@@ -43,7 +44,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     @Override
     public void onBindViewHolder(@NonNull final ProductAdapter.MyViewHolder myViewHolder, final int i) {
         myViewHolder.productTitle.setText(myPojoList.get(i).getName() + " (" + myPojoList.get(i).getUnit() + ")");
-        myViewHolder.producGst.setText("GST- "+myPojoList.get(i).getGst());
+        myViewHolder.producGst.setText("GST- " + myPojoList.get(i).getGst());
         if (myPojoList.get(i).getCountValue() != 0) {
             myViewHolder.textView_nos.setText("" + myPojoList.get(i).getCountValue());
         }
@@ -62,7 +63,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
                 int count1 = (int) myPojoList.get(i).getCountValue();
                 if (count1 > 1) {
                     myPojoList.get(i).setCountValue(count1 - 1);
-                    // addProduct(count1 - 1, position, true);
                 }
                 notifyDataSetChanged();
             }
@@ -73,9 +73,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             public void onClick(View view) {
                 final CreateOrderActivity rootActivity = (CreateOrderActivity) context;
                 if (rootActivity != null) {
-                    if (actionListener != null)
-                        actionListener.onItemTap(myViewHolder.card_view);
-                        addItemToCart(i);
+                    addItemToCart(i);
                     Vibrator vb = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                     assert vb != null;
                     vb.vibrate(20);
@@ -91,20 +89,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public void addItemToCart(int position) {
         DbHelper dbHelper = new DbHelper(context);
         MyPojo myBasket = new MyPojo();
+        myBasket.setId(myPojoList.get(position).getId());
         myBasket.setName(myPojoList.get(position).getName());
         myBasket.setUnit(myPojoList.get(position).getUnit());
         myBasket.setQuant(myPojoList.get(position).getCountValue());
-//        myBasket.setUnit(myPojoList.get(position).getCountValue());
-//        myBasket.setQuantity(FilteruserList.get(position).getCountValue());
-
-//        if (categoryName != null && !categoryName.equals("")) {
-//            myBasket.setCategoryName(categoryName);
-//        } else {
-//            Result result = dbHelper.getCategoryData(FilteruserList.get(position).getCategoryId());
-//            myBasket.setCategoryName(result.getCategoryName());
-//        }
+        myBasket.setGst(myPojoList.get(position).getGst());
         dbHelper.upsertBasketOrderData(myBasket);
         notifyDataSetChanged();
+        Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -112,10 +104,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         return myPojoList.size();
     }
 
-//    private void setProductValue() {
-//        textView_nos.setText("" + count);
-//        txt_stock.setText("Quantity-" + count);
-//    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView productTitle, decrement_Product, textView_nos, increase_Product, textView_addToCart, producGst;

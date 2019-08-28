@@ -22,22 +22,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.BasketActivity"></activity>
-        <activity
-            android:name=".activity.DashboardActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.ProfileActivity"></activity>
+        <activity android:name=".activity.BasketActivity" />
         <activity android:name=".activity.CreateOrderActivity" />
         <activity android:name=".activity.DistributorListActivity" />
         <activity android:name=".activity.RetailerListActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.SplashActivity"></activity>
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activity.SplashActivity" />
+        <activity android:name=".activity.MainActivity">
+
         </activity>
     </application>
 

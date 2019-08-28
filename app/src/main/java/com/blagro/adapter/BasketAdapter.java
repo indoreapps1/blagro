@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blagro.R;
 import com.blagro.activity.CreateOrderActivity;
@@ -23,7 +24,6 @@ import java.util.List;
 public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.MyViewHolder> {
     Context context;
     List<MyPojo> myPojoList;
-    DbHelper dbHelper;
 
     public BasketAdapter(Context context, List<MyPojo> myPojoList) {
         this.context = context;
@@ -39,33 +39,27 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final BasketAdapter.MyViewHolder myViewHolder, final int i) {
-            myViewHolder.item_name.setText(myPojoList.get(i).getName());
-            myViewHolder.item_quantity.setText(myPojoList.get(i).getQuant());
-            myViewHolder.item_gst.setText(myPojoList.get(i).getGst());
-
-            myViewHolder.tv_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    DbHelper dbHelper = new DbHelper(context);
-                    if (myPojoList.size() == 0) {//delete category data if all item deleted from this ctegory
-                        Intent intent=new Intent(context, CreateOrderActivity.class);
-                        context.startActivity(intent);
-                    }
-                    else {
-                        dbHelper.deleteBasketOrderDataById(myPojoList.get(i).getId());
-                        myPojoList.remove(i);
-                    }
-//                        if (myPojoList.size() == 0) {
-//                            ((FragmentActivity) context).getSupportFragmentManager().popBackStack();//back to previes screen
-//                        } else {
-//                            Intent myIntent = new Intent("basketItem");
-//                            myIntent.putExtra("basketFlag", true);
-//                            LocalBroadcastManager.getInstance(context).sendBroadcast(myIntent);
-//                        }
-
-                    notifyDataSetChanged();
+        myViewHolder.item_name.setText(myPojoList.get(i).getName());
+        myViewHolder.item_quantity.setText("" + myPojoList.get(i).getQuant() + "(" + myPojoList.get(i).getUnit() + ")");
+        myViewHolder.item_gst.setText(myPojoList.get(i).getGst());
+        myViewHolder.tv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DbHelper dbHelper = new DbHelper(context);
+                dbHelper.deleteBasketOrderDataById(myPojoList.get(i).getId());
+                myPojoList.remove(i);
+                if (myPojoList.size() == 0) {
+                    Intent intent = new Intent(context, CreateOrderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(intent);
+                } else {
+                    Intent myIntent = new Intent("basketItem");
+                    myIntent.putExtra("basketFlag", true);
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(myIntent);
                 }
-            });
+                notifyDataSetChanged();
+            }
+        });
 
     }
 

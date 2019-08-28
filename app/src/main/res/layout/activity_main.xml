@@ -15,50 +15,51 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" >
+            android:background="?attr/colorPrimary">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@color/colorWhite"
-                android:textSize="18sp"
-                android:textStyle="italic|bold"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="5dp"
-                android:gravity="center_vertical"
-                android:layout_centerVertical="true"/>
-
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp">
-
-                <com.blagro.utilities.CircleImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/default_circle"
+                    android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="2dp"
-                    android:layout_gravity="center"/>
+                    android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
+                    android:text="Blaggro"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp"
+                    android:textStyle="italic|bold" />
+
+                <LinearLayout
+                    android:id="@+id/layout_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical">
+
+                    <com.blagro.utilities.CircleImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="2dp"
+                        android:src="@drawable/default_circle" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
                         android:text="My Profile"
                         android:textColor="@color/colorWhite"
                         android:textSize="10sp"
-                        android:textStyle="italic"
-                        android:gravity="center_vertical"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:padding="2dp"/>
+                        android:textStyle="italic" />
 
                 </LinearLayout>
 
@@ -78,28 +79,28 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true">
 
-    <TextView
-        android:id="@+id/txt_cicrle"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/cart_circle"
-        android:gravity="center"
-        android:textColor="@color/colorSkyBue"
-        android:textSize="14sp"
-        android:textStyle="bold|italic" />
+        <TextView
+            android:id="@+id/txt_cicrle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/cart_circle"
+            android:gravity="center"
+            android:textColor="@color/colorSkyBue"
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
 
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/cart_circle"
-        android:gravity="center"
-        android:src="@drawable/ic_add_black_24dp"
-        android:textColor="@color/colorSkyBue"
-        android:textStyle="bold|italic" />
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/cart_circle"
+            android:gravity="center"
+            android:src="@drawable/ic_add_black_24dp"
+            android:textColor="@color/colorSkyBue"
+            android:textStyle="bold|italic" />
 
     </RelativeLayout>
 
@@ -108,9 +109,9 @@
         android:id="@+id/txt_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/layout_circle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_below="@id/layout_circle"
         android:layout_marginTop="5dp"
         android:gravity="center"
         android:text="Create New Order"
@@ -136,8 +137,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:gravity="center"
             android:text="Retailer List"
             android:textColor="@color/colorSkyBue"
             android:textSize="14sp"
@@ -164,8 +165,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:gravity="center"
             android:text="Distributor List"
             android:textColor="@color/colorSkyBue"
             android:textSize="14sp"
@@ -177,12 +178,12 @@
         android:id="@+id/layout_distributor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@id/txt_create"
         android:layout_below="@id/txt_create"
+        android:layout_alignRight="@id/txt_create"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_margin="10dp"
-        android:orientation="vertical"
-        android:layout_centerVertical="true">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="70dp"
@@ -191,15 +192,15 @@
             android:src="@drawable/distributor" />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:text="Distributors"
-        android:textColor="@color/colorWhite"
-        android:textSize="14sp"
-        android:textStyle="bold|italic" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Distributors"
+            android:textColor="@color/colorWhite"
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
 
     </LinearLayout>
 
@@ -207,9 +208,9 @@
         android:id="@+id/layout_retailer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:layout_below="@id/txt_create"
         android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
         <ImageView
@@ -221,8 +222,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:gravity="center"
             android:text="Retailers"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"

@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/blur_bg"
+    android:orientation="vertical"
     tools:context=".activity.CreateOrderActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="55dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary" >
+            android:background="?attr/colorPrimary">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <!--<TextView-->
-                    <!--android:id="@+id/txt_appName"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/app_name"-->
-                    <!--android:textColor="@color/colorWhite"-->
-                    <!--android:textSize="18sp"-->
-                    <!--android:textStyle="italic|bold"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_marginLeft="5dp"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:layout_centerVertical="true"/>-->
+                <!--android:id="@+id/txt_appName"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/app_name"-->
+                <!--android:textColor="@color/colorWhite"-->
+                <!--android:textSize="18sp"-->
+                <!--android:textStyle="italic|bold"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:layout_centerVertical="true"/>-->
 
                 <LinearLayout
+                    android:id="@+id/layout_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical">
 
                     <com.blagro.utilities.CircleImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/default_circle"
                         android:layout_centerVertical="true"
+                        android:layout_gravity="center"
                         android:layout_marginTop="2dp"
-                        android:layout_gravity="center"/>
+                        android:src="@drawable/default_circle" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center"
+                        android:gravity="center_vertical"
+                        android:padding="2dp"
                         android:text="My Profile"
                         android:textColor="@color/colorWhite"
                         android:textSize="10sp"
-                        android:textStyle="italic"
-                        android:gravity="center_vertical"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center"
-                        android:padding="2dp"/>
+                        android:textStyle="italic" />
 
                 </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/layout_cart"
-                    android:layout_width="match_parent"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true">
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true">
 
                     <TextView
                         android:id="@+id/txt_cart"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="@drawable/shopping_cart"
+                        android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="5dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginRight="20dp"
-                        android:layout_marginTop="5dp"
+                        android:background="@drawable/shopping_cart"
                         android:gravity="right|center"
                         android:textSize="35sp" />
 
@@ -93,20 +93,20 @@
                         android:id="@+id/cart_dot"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
+                        android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginBottom="20dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
                         android:layout_marginEnd="15dp"
                         android:layout_marginRight="15dp"
+                        android:layout_marginBottom="20dp"
                         android:background="@drawable/cart_circle_red"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true"
                         android:gravity="center"
-                        android:text="j"
+                        android:text=""
                         android:textColor="@color/colorWhite"
                         android:textSize="12sp"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
 
                 </RelativeLayout>
@@ -119,136 +119,182 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <TextView
-        android:id="@+id/txt_city"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select City"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
-        android:textStyle="bold|italic"
-        android:layout_gravity="left"
-        android:gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@id/app_bar"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="55dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true">
 
-    <Spinner
-        android:id="@+id/spinner_city"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/bg_spinne"
-        android:layout_below="@id/txt_city"
-        style="@style/Spinner">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    </Spinner>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <TextView
+                    android:id="@+id/txt_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="left"
+                    android:text="Select City"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic" />
 
+                <Spinner
+                    android:id="@+id/spinner_city"
+                    style="@style/Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/txt_city"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_spinne">
 
-    <TextView
-        android:id="@+id/txt_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Area"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
-        android:textStyle="bold|italic"
-        android:layout_gravity="left"
-        android:gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@id/spinner_city"/>
-
-    <Spinner
-        android:id="@+id/spinner_area"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/bg_spinne"
-        android:layout_below="@id/txt_area"
-        style="@style/Spinner">
-
-    </Spinner>
+                </Spinner>
 
 
-    <TextView
-        android:id="@+id/txt_cat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Category"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
-        android:textStyle="bold|italic"
-        android:layout_gravity="left"
-        android:gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@id/spinner_area"/>
+                <TextView
+                    android:id="@+id/txt_area"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spinner_city"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="left"
+                    android:text="Select Distributer"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic" />
 
-    <Spinner
-        android:id="@+id/spinner_category"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/bg_spinne"
-        android:layout_below="@id/txt_cat"
-        style="@style/Spinner">
+                <Spinner
+                    android:id="@+id/spinner_area"
+                    style="@style/Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/txt_area"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_spinne">
 
-    </Spinner>
+                </Spinner>
 
-    <TextView
-        android:id="@+id/txt_product"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Product"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
-        android:textStyle="bold|italic"
-        android:layout_gravity="left"
-        android:gravity="left"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/spinner_category"/>
+                <TextView
+                    android:id="@+id/txt_retailer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spinner_area"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="left"
+                    android:text="Select Retailer"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/product_recycle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_below="@id/txt_product">
+                <Spinner
+                    android:id="@+id/spinner_retailer"
+                    style="@style/Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/txt_retailer"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_spinne">
 
-    </android.support.v7.widget.RecyclerView>
+                </Spinner>
 
-    <TextView
-        android:id="@+id/tv_proceed"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorSkyBue"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Proceed"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
-        android:textStyle="italic|bold" />
 
+                <TextView
+                    android:id="@+id/txt_cat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spinner_retailer"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="left"
+                    android:text="Select Category"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic" />
+
+                <Spinner
+                    android:id="@+id/spinner_category"
+                    style="@style/Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/txt_cat"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_spinne">
+
+                </Spinner>
+
+                <TextView
+                    android:id="@+id/txt_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/spinner_category"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="left"
+                    android:text="Select Product"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp"
+                    android:textStyle="bold|italic" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/product_recycle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt_product"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/tv_proceed"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/colorSkyBue"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="Proceed"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp"
+                    android:textStyle="italic|bold" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>

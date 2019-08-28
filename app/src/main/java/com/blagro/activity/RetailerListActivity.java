@@ -59,7 +59,7 @@ public class RetailerListActivity extends AppCompatActivity {
                                     arrayList.addAll(Arrays.asList(pojo.getCity()));
                                 }
                                 if (arrayList != null && arrayList.size() > 0) {
-                                    arrayAdapter = new ArrayAdapter(RetailerListActivity.this, android.R.layout.simple_list_item_1, arrayList);
+                                    arrayAdapter = new ArrayAdapter<String>(RetailerListActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
                                     spinner_city.setAdapter(arrayAdapter);
                                 }
                             }

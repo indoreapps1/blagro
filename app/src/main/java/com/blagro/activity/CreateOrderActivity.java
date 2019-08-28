@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,26 +32,31 @@ import java.util.List;
 
 public class CreateOrderActivity extends AppCompatActivity {
 
-    Spinner spinner_city, spinner_area, spinner_category;
-    ArrayList<String> cityArrayList, categoryArrayList;
-    List<MyPojo> cityPojoList, cateoryPojoList, productPojoList;
+    Spinner spinner_city, spinnerDistributer, spinner_category, spinner_retailer;
+    ArrayList<String> cityArrayList, categoryArrayList, distubterArrayList, retailerArrayList;
+    List<MyPojo> cityPojoList, cateoryPojoList, productPojoList, distubterPojoList, retailerPojoList;
     ArrayAdapter<String> arrayCityAdapter, arrayCetoryAdapter;
     RecyclerView product_recycle;
     TextView cart_dot, txt_cart, tv_proceed;
     ProductAdapter productAdapter;
-    String selectedCategory;
+    String selectedCategory, distributer, retailer, city;
+    LinearLayout layout_profile;
+    RelativeLayout layout_cart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_order);
         spinner_city = findViewById(R.id.spinner_city);
-        spinner_area = findViewById(R.id.spinner_area);
+        spinnerDistributer = findViewById(R.id.spinner_area);
+        spinner_retailer = findViewById(R.id.spinner_retailer);
         spinner_category = findViewById(R.id.spinner_category);
         product_recycle = findViewById(R.id.product_recycle);
         cart_dot = findViewById(R.id.cart_dot);
         txt_cart = findViewById(R.id.txt_cart);
         tv_proceed = findViewById(R.id.tv_proceed);
+        layout_profile = findViewById(R.id.layout_profile);
+        layout_cart = findViewById(R.id.layout_cart);
         productPojoList = new ArrayList<>();
         product_recycle.setLayoutManager(new LinearLayoutManager(this));
         setCitySpinnerData();
@@ -57,9 +64,46 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                selectedCategory = parent.getItemAtPosition(position).toString();
                 selectedCategory = parent.getSelectedItem().toString();
-                Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
+                setProductList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                city = parent.getSelectedItem().toString();
+                getDistributerList();
+                getRetailerList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerDistributer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                distributer = parent.getSelectedItem().toString();
+                setProductList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinner_retailer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                retailer = parent.getSelectedItem().toString();
                 setProductList();
             }
 
@@ -74,7 +118,21 @@ public class CreateOrderActivity extends AppCompatActivity {
         tv_proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(CreateOrderActivity.this, BasketActivity.class);
+                Intent intent = new Intent(CreateOrderActivity.this, BasketActivity.class);
+                startActivity(intent);
+            }
+        });
+        layout_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateOrderActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        layout_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CreateOrderActivity.this, BasketActivity.class);
                 startActivity(intent);
             }
         });
@@ -131,7 +189,6 @@ public class CreateOrderActivity extends AppCompatActivity {
             serviceCaller.callCateorygListService(new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
-//                    Toast.makeText(RetailerListActivity.this, workName, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
                         MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                         if (myPojos != null) {
@@ -189,7 +246,6 @@ public class CreateOrderActivity extends AppCompatActivity {
             serviceCaller.callProductListService(selectedCategory, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
-                    Toast.makeText(CreateOrderActivity.this, selectedCategory, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
                         MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                         if (myPojos != null) {
@@ -212,5 +268,81 @@ public class CreateOrderActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void getDistributerList() {
+        distubterArrayList = new ArrayList<String>();
+        distubterPojoList = new ArrayList<MyPojo>();
+        if (Utility.isOnline(this)) {
+            ServiceCaller serviceCaller = new ServiceCaller(this);
+            serviceCaller.callDistributerListService(city, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    if (isComplete) {
+                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                        if (myPojos != null) {
+                            distubterPojoList.addAll(Arrays.asList(myPojos));
+                            if (distubterPojoList != null && distubterPojoList.size() > 0) {
+                                for (MyPojo pojo : distubterPojoList) {
+                                    distubterArrayList.addAll(Arrays.asList(pojo.getCategory()));
+                                }
+                                if (distubterArrayList != null && distubterArrayList.size() != 0) {
+                                    ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, distubterArrayList);
+                                    spinnerDistributer.setAdapter(adapter);
+                                }
+                            }
+                        } else {
+                            Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(CreateOrderActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+        } else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void getRetailerList() {
+        if (Utility.isOnline(this)) {
+            retailerArrayList = new ArrayList<String>();
+            retailerPojoList = new ArrayList<MyPojo>();
+            ServiceCaller serviceCaller = new ServiceCaller(this);
+            serviceCaller.callRetailerListService(city, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    if (isComplete) {
+                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                        if (myPojos != null) {
+                            retailerPojoList.addAll(Arrays.asList(myPojos));
+                            if (retailerPojoList != null && retailerPojoList.size() > 0) {
+                                for (MyPojo pojo : retailerPojoList) {
+                                    retailerArrayList.addAll(Arrays.asList(pojo.getCategory()));
+                                }
+                                if (retailerArrayList != null && retailerArrayList.size() != 0) {
+                                    ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, retailerArrayList);
+                                    spinner_retailer.setAdapter(adapter);
+                                }
+                            }
+                        } else {
+                            Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(CreateOrderActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+        } else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
     }
 }

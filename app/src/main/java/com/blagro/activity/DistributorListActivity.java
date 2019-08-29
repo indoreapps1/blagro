@@ -3,12 +3,18 @@ package com.blagro.activity;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.blagro.R;
+import com.blagro.adapter.DistributorAdapter;
+import com.blagro.adapter.RetailerAdapter;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
 import com.blagro.model.MyPojo;
@@ -25,8 +31,11 @@ public class DistributorListActivity extends AppCompatActivity {
     RecyclerView recycle_distributorList;
     Spinner spinner_city;
     ArrayList<String> arrayList;
-    List<MyPojo> myPojoList;
+    List<MyPojo> myPojoList, distributorPojoList;
     ArrayAdapter arrayAdapter;
+    DistributorAdapter distributorAdapter;
+    ProgressBar pb;
+    String sCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +43,20 @@ public class DistributorListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_distributor_list);
         recycle_distributorList = findViewById(R.id.recycle_distributorList);
         spinner_city = findViewById(R.id.spinner_city);
+        pb = findViewById(R.id.pb);
         setSpinnerData();
+        spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sCity=parent.getSelectedItem().toString();
+                setDistributorList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private List<String> setSpinnerData() {
@@ -79,5 +101,40 @@ public class DistributorListActivity extends AppCompatActivity {
 
         return arrayList;
 
+    }
+
+
+    private void setDistributorList(){
+        distributorPojoList=new ArrayList<>();
+        if (Utility.isOnline(this)){
+            pb.setVisibility(View.VISIBLE);
+            ServiceCaller serviceCaller=new ServiceCaller(this);
+            serviceCaller.callDistributerListService(sCity, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    pb.setVisibility(View.GONE);
+                    if (isComplete){
+                        MyPojo[] myPojos=new Gson().fromJson(workName, MyPojo[].class);
+                        if (myPojos!=null){
+                            distributorPojoList.addAll(Arrays.asList(myPojos));
+                            if (distributorPojoList!=null){
+                                distributorAdapter=new DistributorAdapter(DistributorListActivity.this, distributorPojoList);
+                                recycle_distributorList.setLayoutManager(new LinearLayoutManager(DistributorListActivity.this));
+                                recycle_distributorList.setAdapter(distributorAdapter);
+                            }
+                            else {
+                                Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    else {
+                        Toast.makeText(DistributorListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
     }
 }

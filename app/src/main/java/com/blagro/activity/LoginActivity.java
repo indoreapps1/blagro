@@ -41,14 +41,22 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.setMessage("Loading Please Wait...");
                         progressDialog.show();
                         ServiceCaller serviceCaller = new ServiceCaller(LoginActivity.this);
-                        serviceCaller.callLoginService(sUsername, new IAsyncWorkCompletedCallback() {
+                        serviceCaller.callLoginService(sUsername, sPass, new IAsyncWorkCompletedCallback() {
                             @Override
                             public void onDone(String workName, boolean isComplete) {
                                 progressDialog.dismiss();
-                                Toast.makeText(LoginActivity.this, "Login Sucessfully", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                edt_username.setText("");
-                                edt_pass.setText("");
+                                if (isComplete) {
+                                    if (workName.trim().equalsIgnoreCase("\"Success\"")) {
+                                        Toast.makeText(LoginActivity.this, "Login Sucessfully", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        edt_username.setText("");
+                                        edt_pass.setText("");
+                                    }else {
+                                        Toast.makeText(LoginActivity.this, "Please enter correct details", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
                     } else {

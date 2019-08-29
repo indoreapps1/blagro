@@ -34,9 +34,9 @@ public class ServiceCaller {
     }
 
     //    //call login data
-    public void callLoginService(final String phone, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = Contants.SERVICE_BASE_URL + Contants.Login;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+    public void callLoginService(final String username, final String password, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/login?emp_code=" +username+ "&password="+ password;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 workCompletedCallback.onDone(response, true);
@@ -46,14 +46,7 @@ public class ServiceCaller {
             public void onErrorResponse(VolleyError error) {
                 workCompletedCallback.onDone(error.getMessage(), false);
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("phone", phone);
-                return params;
-            }
-        };
+        });
 
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);

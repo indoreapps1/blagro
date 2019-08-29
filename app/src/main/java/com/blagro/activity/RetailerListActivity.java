@@ -3,12 +3,17 @@ package com.blagro.activity;
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.blagro.R;
+import com.blagro.adapter.RetailerAdapter;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
 import com.blagro.model.MyPojo;
@@ -25,8 +30,11 @@ public class RetailerListActivity extends AppCompatActivity {
     RecyclerView recycle_retailerList;
     Spinner spinner_city;
     ArrayList<String> arrayList;
-    List<MyPojo> myPojoList;
+    List<MyPojo> myPojoList, retailerPojoList;
     ArrayAdapter<String> arrayAdapter;
+    RetailerAdapter retailerAdapter;
+    ProgressBar pb;
+    String sCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +42,20 @@ public class RetailerListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_retailer_list);
         recycle_retailerList = findViewById(R.id.recycle_retailerList);
         spinner_city = findViewById(R.id.spinner_city);
+        pb = findViewById(R.id.pb);
         setSpinnerData();
+        spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                sCity=parent.getSelectedItem().toString();
+                setRetailerList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private List<String> setSpinnerData() {
@@ -79,5 +100,39 @@ public class RetailerListActivity extends AppCompatActivity {
 
         return arrayList;
 
+    }
+
+    private void setRetailerList(){
+        retailerPojoList=new ArrayList<>();
+        if (Utility.isOnline(this)){
+            pb.setVisibility(View.VISIBLE);
+            ServiceCaller serviceCaller=new ServiceCaller(this);
+            serviceCaller.callRetailerListService(sCity, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    pb.setVisibility(View.GONE);
+                    if (isComplete){
+                        MyPojo[] myPojos=new Gson().fromJson(workName, MyPojo[].class);
+                        if (myPojos!=null){
+                            retailerPojoList.addAll(Arrays.asList(myPojos));
+                            if (retailerPojoList!=null){
+                            retailerAdapter=new RetailerAdapter(RetailerListActivity.this, retailerPojoList);
+                            recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerListActivity.this));
+                            recycle_retailerList.setAdapter(retailerAdapter);
+                            }
+                            else {
+                                Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    else {
+                        Toast.makeText(RetailerListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
     }
 }

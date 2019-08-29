@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     String selectedCategory, distributer, retailer, city;
     LinearLayout layout_profile;
     RelativeLayout layout_cart;
+    ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +59,12 @@ public class CreateOrderActivity extends AppCompatActivity {
         tv_proceed = findViewById(R.id.tv_proceed);
         layout_profile = findViewById(R.id.layout_profile);
         layout_cart = findViewById(R.id.layout_cart);
+        pb = findViewById(R.id.pb);
         productPojoList = new ArrayList<>();
         product_recycle.setLayoutManager(new LinearLayoutManager(this));
         setCitySpinnerData();
         setCategorySpinnerData();
-        spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategory = parent.getSelectedItem().toString();
-                setProductList();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -86,6 +78,7 @@ public class CreateOrderActivity extends AppCompatActivity {
 
             }
         });
+
 
         spinnerDistributer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -112,6 +105,21 @@ public class CreateOrderActivity extends AppCompatActivity {
 
             }
         });
+
+
+        spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedCategory = parent.getSelectedItem().toString();
+                setProductList();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         setItemCart();
 
@@ -242,10 +250,12 @@ public class CreateOrderActivity extends AppCompatActivity {
 
     private void setProductList() {
         if (Utility.isOnline(this)) {
+            pb.setVisibility(View.VISIBLE);
             ServiceCaller serviceCaller = new ServiceCaller(this);
             serviceCaller.callProductListService(selectedCategory, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
+                    pb.setVisibility(View.GONE);
                     if (isComplete) {
                         MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                         if (myPojos != null) {
@@ -284,7 +294,7 @@ public class CreateOrderActivity extends AppCompatActivity {
                             distubterPojoList.addAll(Arrays.asList(myPojos));
                             if (distubterPojoList != null && distubterPojoList.size() > 0) {
                                 for (MyPojo pojo : distubterPojoList) {
-                                    distubterArrayList.addAll(Arrays.asList(pojo.getCategory()));
+                                    distubterArrayList.addAll(Arrays.asList(pojo.getName()));
                                 }
                                 if (distubterArrayList != null && distubterArrayList.size() != 0) {
                                     ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, distubterArrayList);
@@ -323,7 +333,7 @@ public class CreateOrderActivity extends AppCompatActivity {
                             retailerPojoList.addAll(Arrays.asList(myPojos));
                             if (retailerPojoList != null && retailerPojoList.size() > 0) {
                                 for (MyPojo pojo : retailerPojoList) {
-                                    retailerArrayList.addAll(Arrays.asList(pojo.getCategory()));
+                                    retailerArrayList.addAll(Arrays.asList(pojo.getName()));
                                 }
                                 if (retailerArrayList != null && retailerArrayList.size() != 0) {
                                     ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, retailerArrayList);

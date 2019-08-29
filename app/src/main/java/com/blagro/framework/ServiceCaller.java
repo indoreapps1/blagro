@@ -114,7 +114,7 @@ public class ServiceCaller {
     }
 
     public void callDistributerListService(final String city, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/product?city=" + city;
+        final String url = "http://blapi2.veteransoftwares.com/api/distributor?city=" + city;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -130,7 +130,7 @@ public class ServiceCaller {
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
     public void callRetailerListService(final String city, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/product?city=" + city;
+        final String url = "http://blapi2.veteransoftwares.com/api/retailer?city=" + city;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

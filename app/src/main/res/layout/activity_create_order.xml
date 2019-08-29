@@ -267,16 +267,33 @@
                     android:textSize="16sp"
                     android:textStyle="bold|italic" />
 
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txt_product">
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/product_recycle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_product"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginBottom="5dp">
+                    android:layout_marginBottom="50dp">
 
                 </android.support.v7.widget.RecyclerView>
+
+                <ProgressBar
+                    android:id="@+id/pb"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:indeterminateTint="@color/colorSkyBue"
+                    android:indeterminate="true"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_proceed"

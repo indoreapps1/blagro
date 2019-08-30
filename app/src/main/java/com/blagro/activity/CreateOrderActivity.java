@@ -3,8 +3,9 @@ package com.blagro.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -49,6 +50,10 @@ public class CreateOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_order);
+        init();
+    }
+
+    private void init() {
         spinner_city = findViewById(R.id.spinner_city);
         spinnerDistributer = findViewById(R.id.spinner_area);
         spinner_retailer = findViewById(R.id.spinner_retailer);
@@ -60,7 +65,6 @@ public class CreateOrderActivity extends AppCompatActivity {
         layout_profile = findViewById(R.id.layout_profile);
         layout_cart = findViewById(R.id.layout_cart);
         pb = findViewById(R.id.pb);
-        productPojoList = new ArrayList<>();
         product_recycle.setLayoutManager(new LinearLayoutManager(this));
         setCitySpinnerData();
         setCategorySpinnerData();
@@ -71,6 +75,7 @@ public class CreateOrderActivity extends AppCompatActivity {
                 city = parent.getSelectedItem().toString();
                 getDistributerList();
                 getRetailerList();
+                storeData();
             }
 
             @Override
@@ -85,6 +90,7 @@ public class CreateOrderActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 distributer = parent.getSelectedItem().toString();
                 setProductList();
+                storeData();
             }
 
             @Override
@@ -98,6 +104,7 @@ public class CreateOrderActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 retailer = parent.getSelectedItem().toString();
                 setProductList();
+                storeData();
             }
 
             @Override
@@ -112,6 +119,7 @@ public class CreateOrderActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedCategory = parent.getSelectedItem().toString();
                 setProductList();
+                storeData();
             }
 
             @Override
@@ -150,6 +158,8 @@ public class CreateOrderActivity extends AppCompatActivity {
     private void setCitySpinnerData() {
         cityArrayList = new ArrayList<String>();
         cityPojoList = new ArrayList<MyPojo>();
+        cityArrayList.clear();
+        cityPojoList.clear();
         if (Utility.isOnline(this)) {
             final ProgressDialog progressDialog = new ProgressDialog(CreateOrderActivity.this);
             progressDialog.setMessage("Loading Data...");
@@ -192,6 +202,8 @@ public class CreateOrderActivity extends AppCompatActivity {
     private void setCategorySpinnerData() {
         categoryArrayList = new ArrayList<String>();
         cateoryPojoList = new ArrayList<MyPojo>();
+        categoryArrayList.clear();
+        cateoryPojoList.clear();
         if (Utility.isOnline(this)) {
             ServiceCaller serviceCaller = new ServiceCaller(CreateOrderActivity.this);
             serviceCaller.callCateorygListService(new IAsyncWorkCompletedCallback() {
@@ -236,6 +248,16 @@ public class CreateOrderActivity extends AppCompatActivity {
         }
     }
 
+    private void storeData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("sharedCity", city);
+        editor.putString("sharedCategory", selectedCategory);
+        editor.putString("sharedDistributor", distributer);
+        editor.putString("sharedRetailer", retailer);
+        editor.apply();
+    }
+
     public void setItemCart() {
         DbHelper dbHelper = new DbHelper(this);
         List<MyPojo> myBasket = dbHelper.GetAllBasketOrderData();
@@ -249,6 +271,8 @@ public class CreateOrderActivity extends AppCompatActivity {
     }
 
     private void setProductList() {
+        productPojoList = new ArrayList<>();
+        productPojoList.clear();
         if (Utility.isOnline(this)) {
             pb.setVisibility(View.VISIBLE);
             ServiceCaller serviceCaller = new ServiceCaller(this);
@@ -262,6 +286,7 @@ public class CreateOrderActivity extends AppCompatActivity {
                             productPojoList.addAll(Arrays.asList(myPojos));
                             if (productPojoList != null) {
                                 productAdapter = new ProductAdapter(CreateOrderActivity.this, productPojoList);
+                                product_recycle.setLayoutManager(new LinearLayoutManager(CreateOrderActivity.this));
                                 product_recycle.setAdapter(productAdapter);
                             }
                         }

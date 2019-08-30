@@ -1,12 +1,11 @@
 package com.blagro.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.blagro.R;
 
@@ -18,6 +17,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       init();
+    }
+
+    private void init() {
         layout_retailerList = findViewById(R.id.layout_retailerList);
         layout_circle = findViewById(R.id.layout_circle);
         layout_distributorrList = findViewById(R.id.layout_distributorrList);

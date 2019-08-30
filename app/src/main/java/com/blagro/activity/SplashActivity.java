@@ -1,15 +1,18 @@
 package com.blagro.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.blagro.R;
 
 public class SplashActivity extends AppCompatActivity {
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +26,19 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                SharedPreferences sharedPreferences=getSharedPreferences("Login", Context.MODE_PRIVATE);
+                username=sharedPreferences.getString("Username", null);
+                if (username!=null){
+                    Intent intent=new Intent(SplashActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Intent intent=new Intent(SplashActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }, 3000);
     }

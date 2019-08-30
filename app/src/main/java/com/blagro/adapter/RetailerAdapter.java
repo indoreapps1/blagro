@@ -24,13 +24,13 @@ public class RetailerAdapter extends RecyclerView.Adapter<RetailerAdapter.MyView
 
     @NonNull
     @Override
-    public RetailerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_retailer, viewGroup, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RetailerAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.item_name.setText("Retailer Name - "+myPojoList.get(i).getName());
         myViewHolder.item_phone.setText("Phone Number -"+myPojoList.get(i).getMobile());
         myViewHolder.item_email.setText("Email - "+myPojoList.get(i).getEmail());

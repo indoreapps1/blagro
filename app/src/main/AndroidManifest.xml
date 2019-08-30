@@ -28,14 +28,18 @@
         <activity android:name=".activity.DistributorListActivity" />
         <activity android:name=".activity.RetailerListActivity" />
         <activity android:name=".activity.LoginActivity" >
+
+        </activity>
+        <activity android:name=".activity.SplashActivity" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SplashActivity" />
         <activity android:name=".activity.MainActivity">
+
 
         </activity>
     </application>

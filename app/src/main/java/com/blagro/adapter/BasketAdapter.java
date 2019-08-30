@@ -32,13 +32,13 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.MyViewHold
 
     @NonNull
     @Override
-    public BasketAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_basket, viewGroup, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final BasketAdapter.MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         myViewHolder.item_name.setText(myPojoList.get(i).getName());
         myViewHolder.item_quantity.setText("" + myPojoList.get(i).getQuant() + "(" + myPojoList.get(i).getUnit() + ")");
         myViewHolder.item_gst.setText(myPojoList.get(i).getGst());

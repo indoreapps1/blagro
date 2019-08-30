@@ -1,8 +1,8 @@
 package com.blagro.activity;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -40,6 +40,10 @@ public class RetailerListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retailer_list);
+       init();
+    }
+
+    private void init() {
         recycle_retailerList = findViewById(R.id.recycle_retailerList);
         spinner_city = findViewById(R.id.spinner_city);
         pb = findViewById(R.id.pb);
@@ -61,6 +65,8 @@ public class RetailerListActivity extends AppCompatActivity {
     private List<String> setSpinnerData() {
         arrayList = new ArrayList<String>();
         myPojoList = new ArrayList<MyPojo>();
+        arrayList.clear();
+        myPojoList.clear();
         if (Utility.isOnline(this)) {
             final ProgressDialog progressDialog = new ProgressDialog(RetailerListActivity.this);
             progressDialog.setMessage("Fetching Cities...");
@@ -111,21 +117,25 @@ public class RetailerListActivity extends AppCompatActivity {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     pb.setVisibility(View.GONE);
-                    if (isComplete){
-                        MyPojo[] myPojos=new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos!=null){
-                            retailerPojoList.addAll(Arrays.asList(myPojos));
-                            if (retailerPojoList!=null){
-                            retailerAdapter=new RetailerAdapter(RetailerListActivity.this, retailerPojoList);
-                            recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerListActivity.this));
-                            recycle_retailerList.setAdapter(retailerAdapter);
-                            }
-                            else {
+                    if (isComplete) {
+                        if (!workName.trim().equalsIgnoreCase("[]")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                retailerPojoList.addAll(Arrays.asList(myPojos));
+                                if (retailerPojoList != null) {
+                                    retailerAdapter = new RetailerAdapter(RetailerListActivity.this, retailerPojoList);
+                                    recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerListActivity.this));
+                                    recycle_retailerList.setAdapter(retailerAdapter);
+                                } else {
+                                    Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
                                 Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
+                        } else {
+                            Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else {
+                    }else {
                         Toast.makeText(RetailerListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }

@@ -3,9 +3,10 @@ package com.blagro.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -39,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (Utility.isOnline(LoginActivity.this)) {
                         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
                         progressDialog.setMessage("Loading Please Wait...");
+                        progressDialog.setCancelable(false);
+                        progressDialog.setCanceledOnTouchOutside(false);
                         progressDialog.show();
                         ServiceCaller serviceCaller = new ServiceCaller(LoginActivity.this);
                         serviceCaller.callLoginService(sUsername, sPass, new IAsyncWorkCompletedCallback() {
@@ -47,6 +50,10 @@ public class LoginActivity extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 if (isComplete) {
                                     if (workName.trim().equalsIgnoreCase("\"Success\"")) {
+                                        SharedPreferences sharedPreferences=getSharedPreferences("Login", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor=sharedPreferences.edit();
+                                        editor.putString("Username", sUsername);
+                                        editor.apply();
                                         Toast.makeText(LoginActivity.this, "Login Sucessfully", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         edt_username.setText("");

@@ -24,13 +24,13 @@ public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.
 
     @NonNull
     @Override
-    public DistributorAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_distributor, viewGroup, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DistributorAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.item_name.setText("Distributor Name - "+myPojoList.get(i).getName());
         myViewHolder.item_phone.setText("Phone Number -"+myPojoList.get(i).getMobile());
         myViewHolder.item_email.setText("Email - "+myPojoList.get(i).getEmail());

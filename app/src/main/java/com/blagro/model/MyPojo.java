@@ -168,4 +168,88 @@ public class MyPojo {
     {
         this.email = email;
     }
+
+    private String area;
+
+    private String emp_code;
+
+    private String emp_name;
+
+    private String mobile_n;
+
+    private String empa_code;
+
+    private String designation;
+
+    private String emp_id;
+
+    public String getArea ()
+    {
+        return area;
+    }
+
+    public void setArea (String area)
+    {
+        this.area = area;
+    }
+
+    public String getEmp_code ()
+    {
+        return emp_code;
+    }
+
+    public void setEmp_code (String emp_code)
+    {
+        this.emp_code = emp_code;
+    }
+
+    public String getEmp_name ()
+    {
+        return emp_name;
+    }
+
+    public void setEmp_name (String emp_name)
+    {
+        this.emp_name = emp_name;
+    }
+
+    public String getMobile_n ()
+    {
+        return mobile_n;
+    }
+
+    public void setMobile_n (String mobile_n)
+    {
+        this.mobile_n = mobile_n;
+    }
+
+    public String getEmpa_code ()
+    {
+        return empa_code;
+    }
+
+    public void setEmpa_code (String empa_code)
+    {
+        this.empa_code = empa_code;
+    }
+
+    public String getDesignation ()
+    {
+        return designation;
+    }
+
+    public void setDesignation (String designation)
+    {
+        this.designation = designation;
+    }
+
+    public String getEmp_id ()
+    {
+        return emp_id;
+    }
+
+    public void setEmp_id (String emp_id)
+    {
+        this.emp_id = emp_id;
+    }
 }

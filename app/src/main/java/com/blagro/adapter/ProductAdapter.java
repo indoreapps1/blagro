@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,13 +37,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     @NonNull
     @Override
-    public ProductAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_product, viewGroup, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ProductAdapter.MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         myViewHolder.productTitle.setText(myPojoList.get(i).getName() + " (" + myPojoList.get(i).getUnit() + ")");
         myViewHolder.producGst.setText("GST- " + myPojoList.get(i).getGst());
         if (myPojoList.get(i).getCountValue() != 0) {
@@ -106,7 +107,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView productTitle, decrement_Product, textView_nos, increase_Product, textView_addToCart, producGst;
+        TextView productTitle, decrement_Product, increase_Product, textView_addToCart, producGst;
+        EditText textView_nos;
         CardView card_view;
 
         public MyViewHolder(@NonNull View itemView) {

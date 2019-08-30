@@ -20,13 +20,12 @@
 
             <TextView
                 android:id="@+id/tv_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:text="X"
                 android:textColor="@color/colorRed"
+                android:background="@drawable/delete"
                 android:textSize="32sp" />
 
 

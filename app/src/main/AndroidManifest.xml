@@ -40,8 +40,10 @@
         </activity>
         <activity android:name=".activity.MainActivity">
 
-
         </activity>
+
+        <service android:name=".utilities.LocationTrack"></service>
+
     </application>
 
 </manifest>

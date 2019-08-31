@@ -2,9 +2,12 @@ package com.blagro.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -13,9 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.blagro.R;
+import com.blagro.framework.IAsyncWorkCompletedCallback;
+import com.blagro.framework.ServiceCaller;
+import com.blagro.utilities.Contants;
 import com.blagro.utilities.LocationTrack;
+import com.blagro.utilities.Utility;
 
 import java.util.ArrayList;
 
@@ -32,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int ALL_PERMISSIONS_RESULT = 101;
     LocationTrack locationTrack;
     double longitude, latitude;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +94,32 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             }
         });
+
+        new GetLocation().execute();
     }
 
+
+    private void getCurrentLocation() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Login", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString("Username", null);
+        if (Utility.isOnline(this)) {
+            ServiceCaller serviceCaller = new ServiceCaller(this);
+            serviceCaller.callAllLocationData(username, latitude, longitude, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    if (isComplete) {
+                        Toast.makeText(MainActivity.this, "" + latitude + " , " + longitude, Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        } else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void getLocation() {
         permissions.add(ACCESS_FINE_LOCATION);
@@ -197,5 +230,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public class GetLocation extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            getLocation();
+            getCurrentLocation();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
 
 }

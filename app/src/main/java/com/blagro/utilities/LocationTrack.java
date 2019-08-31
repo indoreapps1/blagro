@@ -232,7 +232,7 @@ public class LocationTrack extends Service implements LocationListener {
 
     @Override
     public void onCreate() {
-        Handler handler=new Handler(Looper.myLooper());
+//        Handler handler=new Handler(Looper.myLooper());
         super.onCreate();
     }
 

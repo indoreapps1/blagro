@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <permission android:name="com.example.maptest.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
+
 
     <application
         android:name=".framework.AppController"
@@ -41,8 +43,6 @@
         <activity android:name=".activity.MainActivity">
 
         </activity>
-
-        <service android:name=".utilities.LocationTrack"></service>
 
     </application>
 

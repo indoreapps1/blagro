@@ -1,20 +1,13 @@
 package com.blagro.activity;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,15 +25,11 @@ import com.blagro.framework.ServiceCaller;
 import com.blagro.model.Data;
 import com.blagro.model.MyPojo;
 import com.blagro.utilities.Contants;
-import com.blagro.utilities.LocationTrack;
 import com.blagro.utilities.Utility;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class BasketActivity extends AppCompatActivity {
     RecyclerView recyclerView;

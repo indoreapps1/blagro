@@ -51,7 +51,7 @@ public class RetailerActivity extends AppCompatActivity {
         spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sCity=parent.getSelectedItem().toString();
+                sCity = parent.getSelectedItem().toString();
                 setRetailerList();
             }
 
@@ -78,22 +78,25 @@ public class RetailerActivity extends AppCompatActivity {
                     progressDialog.dismiss();
 //                    Toast.makeText(RetailerListActivity.this, workName, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
-                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null) {
-                            myPojoList.addAll(Arrays.asList(myPojos));
-                            if (myPojoList != null && myPojoList.size() > 0) {
-                                for (MyPojo pojo : myPojoList) {
-                                    arrayList.addAll(Arrays.asList(pojo.getCity()));
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                myPojoList.addAll(Arrays.asList(myPojos));
+                                if (myPojoList != null && myPojoList.size() > 0) {
+                                    for (MyPojo pojo : myPojoList) {
+                                        arrayList.addAll(Arrays.asList(pojo.getCity()));
+                                    }
+                                    if (arrayList != null && arrayList.size() > 0) {
+                                        arrayAdapter = new ArrayAdapter<String>(RetailerActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
+                                        spinner_city.setAdapter(arrayAdapter);
+                                    }
                                 }
-                                if (arrayList != null && arrayList.size() > 0) {
-                                    arrayAdapter = new ArrayAdapter<String>(RetailerActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
-                                    spinner_city.setAdapter(arrayAdapter);
-                                }
+                            } else {
+                                Toast.makeText(RetailerActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(RetailerActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                         }
-
                     } else {
                         Toast.makeText(RetailerActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
@@ -108,40 +111,44 @@ public class RetailerActivity extends AppCompatActivity {
 
     }
 
-    private void setRetailerList(){
-        retailerPojoList=new ArrayList<>();
-        if (Utility.isOnline(this)){
+    private void setRetailerList() {
+        retailerPojoList = new ArrayList<>();
+        if (Utility.isOnline(this)) {
             pb.setVisibility(View.VISIBLE);
-            ServiceCaller serviceCaller=new ServiceCaller(this);
+            ServiceCaller serviceCaller = new ServiceCaller(this);
             serviceCaller.callRetailerListService(sCity, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     pb.setVisibility(View.GONE);
                     if (isComplete) {
-                        if (!workName.trim().equalsIgnoreCase("[]")) {
-                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                            if (myPojos != null) {
-                                retailerPojoList.addAll(Arrays.asList(myPojos));
-                                if (retailerPojoList != null) {
-                                    retailerAdapter = new RetailerAdapter(RetailerActivity.this, retailerPojoList);
-                                    recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerActivity.this));
-                                    recycle_retailerList.setAdapter(retailerAdapter);
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            if (!workName.trim().equalsIgnoreCase("[]")) {
+                                MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                                if (myPojos != null) {
+                                    retailerPojoList.addAll(Arrays.asList(myPojos));
+                                    if (retailerPojoList != null) {
+                                        retailerAdapter = new RetailerAdapter(RetailerActivity.this, retailerPojoList);
+                                        recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerActivity.this));
+                                        recycle_retailerList.setAdapter(retailerAdapter);
+                                    } else {
+                                        Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                    }
                                 } else {
                                     Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
+                        }else {
                             Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
-                    }else {
+                    } else {
                         Toast.makeText(RetailerActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-        }else {
+        } else {
             Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
         }
     }

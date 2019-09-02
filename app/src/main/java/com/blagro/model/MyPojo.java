@@ -252,4 +252,65 @@ public class MyPojo {
     {
         this.emp_id = emp_id;
     }
+
+    private String order_no;
+
+    private String date;
+
+    private String distributor_id;
+
+    private String retailer_id;
+
+    private String order_id;
+
+    public String getOrder_no ()
+    {
+        return order_no;
+    }
+
+    public void setOrder_no (String order_no)
+    {
+        this.order_no = order_no;
+    }
+
+    public String getDate ()
+    {
+        return date;
+    }
+
+    public void setDate (String date)
+    {
+        this.date = date;
+    }
+
+    public String getDistributor_id ()
+    {
+        return distributor_id;
+    }
+
+    public void setDistributor_id (String distributor_id)
+    {
+        this.distributor_id = distributor_id;
+    }
+
+    public String getRetailer_id ()
+    {
+        return retailer_id;
+    }
+
+    public void setRetailer_id (String retailer_id)
+    {
+        this.retailer_id = retailer_id;
+    }
+
+    public String getOrder_id ()
+    {
+        return order_id;
+    }
+
+    public void setOrder_id (String order_id)
+    {
+        this.order_id = order_id;
+    }
+
 }

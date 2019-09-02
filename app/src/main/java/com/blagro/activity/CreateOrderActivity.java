@@ -172,18 +172,23 @@ public class CreateOrderActivity extends AppCompatActivity {
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
                     if (isComplete) {
-                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null) {
-                            cityPojoList.addAll(Arrays.asList(myPojos));
-                            if (cityPojoList != null && cityPojoList.size() > 0) {
-                                for (MyPojo pojo : cityPojoList) {
-                                    cityArrayList.addAll(Arrays.asList(pojo.getCity()));
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                cityPojoList.addAll(Arrays.asList(myPojos));
+                                if (cityPojoList != null && cityPojoList.size() > 0) {
+                                    for (MyPojo pojo : cityPojoList) {
+                                        cityArrayList.addAll(Arrays.asList(pojo.getCity()));
+                                    }
+                                    if (cityArrayList != null && cityArrayList.size() != 0) {
+                                        arrayCityAdapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, cityArrayList);
+                                        spinner_city.setAdapter(arrayCityAdapter);
+                                    }
                                 }
-                                if (cityArrayList != null && cityArrayList.size() != 0) {
-                                    arrayCityAdapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, cityArrayList);
-                                    spinner_city.setAdapter(arrayCityAdapter);
-                                }
+                            } else {
+                                Toast.makeText(CreateOrderActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                             }
+
                         } else {
                             Toast.makeText(CreateOrderActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                         }
@@ -212,16 +217,17 @@ public class CreateOrderActivity extends AppCompatActivity {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     if (isComplete) {
-                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null) {
-                            cateoryPojoList.addAll(Arrays.asList(myPojos));
-                            if (cateoryPojoList != null && cateoryPojoList.size() > 0) {
-                                for (MyPojo pojo : cateoryPojoList) {
-                                    categoryArrayList.addAll(Arrays.asList(pojo.getCategory()));
-                                }
-                                if (categoryArrayList != null && categoryArrayList.size() != 0) {
-                                    arrayCetoryAdapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
-                                    spinner_category.setAdapter(arrayCetoryAdapter);
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                cateoryPojoList.addAll(Arrays.asList(myPojos));
+                                if (cateoryPojoList != null && cateoryPojoList.size() > 0) {
+                                    for (MyPojo pojo : cateoryPojoList) {
+                                        categoryArrayList.addAll(Arrays.asList(pojo.getCategory()));
+                                    }
+                                    if (categoryArrayList != null && categoryArrayList.size() != 0) {
+                                        arrayCetoryAdapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
+                                        spinner_category.setAdapter(arrayCetoryAdapter);
 //                                    spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //                                        @Override
 //                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -233,7 +239,10 @@ public class CreateOrderActivity extends AppCompatActivity {
 //
 //                                        }
 //                                    });
+                                    }
                                 }
+                            } else {
+                                Toast.makeText(CreateOrderActivity.this, "No Category Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(CreateOrderActivity.this, "No Category Found", Toast.LENGTH_SHORT).show();
@@ -283,14 +292,18 @@ public class CreateOrderActivity extends AppCompatActivity {
                 public void onDone(String workName, boolean isComplete) {
                     pb.setVisibility(View.GONE);
                     if (isComplete) {
-                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null) {
-                            productPojoList.addAll(Arrays.asList(myPojos));
-                            if (productPojoList != null) {
-                                productAdapter = new ProductAdapter(CreateOrderActivity.this, productPojoList);
-                                product_recycle.setLayoutManager(new LinearLayoutManager(CreateOrderActivity.this));
-                                product_recycle.setAdapter(productAdapter);
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                productPojoList.addAll(Arrays.asList(myPojos));
+                                if (productPojoList != null) {
+                                    productAdapter = new ProductAdapter(CreateOrderActivity.this, productPojoList);
+                                    product_recycle.setLayoutManager(new LinearLayoutManager(CreateOrderActivity.this));
+                                    product_recycle.setAdapter(productAdapter);
+                                }
                             }
+                        } else {
+                            Toast.makeText(CreateOrderActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
@@ -316,17 +329,21 @@ public class CreateOrderActivity extends AppCompatActivity {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     if (isComplete) {
-                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null) {
-                            distubterPojoList.addAll(Arrays.asList(myPojos));
-                            if (distubterPojoList != null && distubterPojoList.size() > 0) {
-                                for (MyPojo pojo : distubterPojoList) {
-                                    distubterArrayList.addAll(Arrays.asList(pojo.getName()));
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                distubterPojoList.addAll(Arrays.asList(myPojos));
+                                if (distubterPojoList != null && distubterPojoList.size() > 0) {
+                                    for (MyPojo pojo : distubterPojoList) {
+                                        distubterArrayList.addAll(Arrays.asList(pojo.getName()));
+                                    }
+                                    if (distubterArrayList != null && distubterArrayList.size() != 0) {
+                                        ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, distubterArrayList);
+                                        spinnerDistributer.setAdapter(adapter);
+                                    }
                                 }
-                                if (distubterArrayList != null && distubterArrayList.size() != 0) {
-                                    ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, distubterArrayList);
-                                    spinnerDistributer.setAdapter(adapter);
-                                }
+                            } else {
+                                Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
@@ -355,19 +372,23 @@ public class CreateOrderActivity extends AppCompatActivity {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     if (isComplete) {
-                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null) {
-                            retailerPojoList.addAll(Arrays.asList(myPojos));
-                            if (retailerPojoList != null && retailerPojoList.size() > 0) {
-                                for (MyPojo pojo : retailerPojoList) {
-                                    retailerArrayList.addAll(Arrays.asList(pojo.getName()));
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                retailerPojoList.addAll(Arrays.asList(myPojos));
+                                if (retailerPojoList != null && retailerPojoList.size() > 0) {
+                                    for (MyPojo pojo : retailerPojoList) {
+                                        retailerArrayList.addAll(Arrays.asList(pojo.getName()));
+                                    }
+                                    if (retailerArrayList != null && retailerArrayList.size() != 0) {
+                                        ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, retailerArrayList);
+                                        spinner_retailer.setAdapter(adapter);
+                                    }
                                 }
-                                if (retailerArrayList != null && retailerArrayList.size() != 0) {
-                                    ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, retailerArrayList);
-                                    spinner_retailer.setAdapter(adapter);
-                                }
+                            } else {
+                                Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
+                        }else {
                             Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
 

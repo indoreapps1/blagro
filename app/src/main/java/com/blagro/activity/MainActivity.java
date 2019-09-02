@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         layout_distributor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CreateOrderActivity.class));
+                startActivity(new Intent(MainActivity.this, DistributorActivity.class));
             }
         });
         layout_profile.setOnClickListener(new View.OnClickListener() {

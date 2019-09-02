@@ -74,7 +74,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             public void onClick(View view) {
                 final CreateOrderActivity rootActivity = (CreateOrderActivity) context;
                 if (rootActivity != null) {
-                    addItemToCart(i);
+                    addItemToCart(i, myViewHolder);
                     Vibrator vb = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                     assert vb != null;
                     vb.vibrate(20);
@@ -87,13 +87,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
 
     }
 
-    public void addItemToCart(int position) {
+    public void addItemToCart(int position, MyViewHolder myViewHolder) {
         DbHelper dbHelper = new DbHelper(context);
         MyPojo myBasket = new MyPojo();
         myBasket.setId(myPojoList.get(position).getId());
         myBasket.setName(myPojoList.get(position).getName());
         myBasket.setUnit(myPojoList.get(position).getUnit());
-        myBasket.setQuant(myPojoList.get(position).getCountValue());
+        myBasket.setQuant(Integer.parseInt(myViewHolder.textView_nos.getText().toString()));
         myBasket.setGst(myPojoList.get(position).getGst());
         dbHelper.upsertBasketOrderData(myBasket);
         notifyDataSetChanged();

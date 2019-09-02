@@ -67,7 +67,7 @@ public class CreateOrderActivity extends AppCompatActivity {
         pb = findViewById(R.id.pb);
         product_recycle.setLayoutManager(new LinearLayoutManager(this));
         setCitySpinnerData();
-        setCategorySpinnerData();
+//        setCategorySpinnerData();
 
         spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -89,7 +89,8 @@ public class CreateOrderActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 distributer = parent.getSelectedItem().toString();
-                setProductList();
+//                setProductList();
+                setCategorySpinnerData();
                 storeData();
             }
 
@@ -103,7 +104,8 @@ public class CreateOrderActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 retailer = parent.getSelectedItem().toString();
-                setProductList();
+//                setProductList();
+                setCategorySpinnerData();
                 storeData();
             }
 

@@ -13,7 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.blagro.R;
-import com.blagro.adapter.RetailerAdapter;
+import com.blagro.adapter.DistributorAdapter;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
 import com.blagro.model.MyPojo;
@@ -25,26 +25,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RetailerListActivity extends AppCompatActivity {
+public class DistributorActivity extends AppCompatActivity {
 
-    RecyclerView recycle_retailerList;
+    RecyclerView recycle_distributorList;
     Spinner spinner_city;
     ArrayList<String> arrayList;
-    List<MyPojo> myPojoList, retailerPojoList;
-    ArrayAdapter<String> arrayAdapter;
-    RetailerAdapter retailerAdapter;
+    List<MyPojo> myPojoList, distributorPojoList;
+    ArrayAdapter arrayAdapter;
+    DistributorAdapter distributorAdapter;
     ProgressBar pb;
     String sCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retailer_list);
+        setContentView(R.layout.activity_distributor);
         init();
     }
 
     private void init() {
-        recycle_retailerList = findViewById(R.id.recycle_retailerList);
+        recycle_distributorList = findViewById(R.id.recycle_distributorList);
         spinner_city = findViewById(R.id.spinner_city);
         pb = findViewById(R.id.pb);
         setSpinnerData();
@@ -52,7 +52,7 @@ public class RetailerListActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 sCity = parent.getSelectedItem().toString();
-                setRetailerList();
+                setDistributorList();
             }
 
             @Override
@@ -68,10 +68,10 @@ public class RetailerListActivity extends AppCompatActivity {
         arrayList.clear();
         myPojoList.clear();
         if (Utility.isOnline(this)) {
-            final ProgressDialog progressDialog = new ProgressDialog(RetailerListActivity.this);
+            final ProgressDialog progressDialog = new ProgressDialog(DistributorActivity.this);
             progressDialog.setMessage("Fetching Cities...");
             progressDialog.show();
-            ServiceCaller serviceCaller = new ServiceCaller(RetailerListActivity.this);
+            ServiceCaller serviceCaller = new ServiceCaller(DistributorActivity.this);
             serviceCaller.callCityListService(new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
@@ -87,19 +87,19 @@ public class RetailerListActivity extends AppCompatActivity {
                                         arrayList.addAll(Arrays.asList(pojo.getCity()));
                                     }
                                     if (arrayList != null && arrayList.size() > 0) {
-                                        arrayAdapter = new ArrayAdapter<String>(RetailerListActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
+                                        arrayAdapter = new ArrayAdapter(DistributorActivity.this, android.R.layout.simple_list_item_1, arrayList);
                                         spinner_city.setAdapter(arrayAdapter);
                                     }
                                 }
                             } else {
-                                Toast.makeText(RetailerListActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DistributorActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(RetailerListActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
-                        }
 
+                        } else {
+                            Toast.makeText(DistributorActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(RetailerListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DistributorActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -112,12 +112,14 @@ public class RetailerListActivity extends AppCompatActivity {
 
     }
 
-    private void setRetailerList() {
-        retailerPojoList = new ArrayList<>();
+
+    private void setDistributorList() {
+        distributorPojoList = new ArrayList<>();
+        distributorPojoList.clear();
         if (Utility.isOnline(this)) {
             pb.setVisibility(View.VISIBLE);
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callRetailerListService(sCity, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callDistributerListService(sCity, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     pb.setVisibility(View.GONE);
@@ -126,25 +128,25 @@ public class RetailerListActivity extends AppCompatActivity {
                             if (!workName.trim().equalsIgnoreCase("[]")) {
                                 MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                                 if (myPojos != null) {
-                                    retailerPojoList.addAll(Arrays.asList(myPojos));
-                                    if (retailerPojoList != null) {
-                                        retailerAdapter = new RetailerAdapter(RetailerListActivity.this, retailerPojoList);
-                                        recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerListActivity.this));
-                                        recycle_retailerList.setAdapter(retailerAdapter);
+                                    distributorPojoList.addAll(Arrays.asList(myPojos));
+                                    if (distributorPojoList != null) {
+                                        distributorAdapter = new DistributorAdapter(DistributorActivity.this, distributorPojoList);
+                                        recycle_distributorList.setLayoutManager(new LinearLayoutManager(DistributorActivity.this));
+                                        recycle_distributorList.setAdapter(distributorAdapter);
                                     } else {
-                                        Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(DistributorActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(DistributorActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(DistributorActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(RetailerListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(DistributorActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(RetailerListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DistributorActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

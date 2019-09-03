@@ -1,5 +1,6 @@
 package com.blagro.activity;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,8 +20,15 @@ import android.widget.Toast;
 import com.blagro.R;
 import com.blagro.adapter.BasketAdapter;
 import com.blagro.database.DbHelper;
+import com.blagro.framework.IAsyncWorkCompletedCallback;
+import com.blagro.framework.ServiceCaller;
+import com.blagro.model.Data;
 import com.blagro.model.MyPojo;
+import com.blagro.utilities.Contants;
+import com.blagro.utilities.Utility;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BasketActivity extends AppCompatActivity {
@@ -28,14 +37,18 @@ public class BasketActivity extends AppCompatActivity {
     BasketAdapter adapter;
     List<MyPojo> myPojoList;
     LinearLayout layout_profile;
-    TextView txt_category, txt_distributor, txt_retailer, txt_city, tv_chekout;
-    String sCity, sCategory, sDistributor, sRetailer;
+    TextView txt_category, txt_distributor, txt_retailer, txt_city, tv_chekout, txt_dis_id, txt_ret_id;
+    int disId, retId;
+    String sCity, sCategory, sDistributor, sRetailer, convertList;
+    List<Data> dataList;
+    Data data;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basket);
-       init();
+        init();
     }
 
     private void init() {
@@ -46,7 +59,9 @@ public class BasketActivity extends AppCompatActivity {
         txt_retailer = findViewById(R.id.txt_retailer);
         txt_city = findViewById(R.id.txt_city);
         tv_chekout = findViewById(R.id.tv_chekout);
-        dbHelper=new DbHelper(this);
+        txt_dis_id = findViewById(R.id.txt_dis_id);
+        txt_ret_id = findViewById(R.id.txt_ret_id);
+        dbHelper = new DbHelper(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         SharedPreferences sharedPreferences = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
@@ -54,11 +69,15 @@ public class BasketActivity extends AppCompatActivity {
         sDistributor = sharedPreferences.getString("sharedDistributor", null);
         sRetailer = sharedPreferences.getString("sharedRetailer", null);
         sCity = sharedPreferences.getString("sharedCity", null);
+        disId = sharedPreferences.getInt("sharedDisId", 0);
+        retId = sharedPreferences.getInt("sharedRetId", 0);
         if (sCategory != null && sDistributor != null && sRetailer != null && sCity != null) {
             txt_category.setText("Product Category - " + sCategory);
             txt_distributor.setText("Distributor Name - " + sDistributor);
             txt_retailer.setText("Retailer Name - " + sRetailer);
             txt_city.setText("City - " + sCity);
+            txt_dis_id.setText("Distributor Id"+disId);
+            txt_ret_id.setText("Retailer Id"+ retId);
         } else {
             Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
         }
@@ -81,14 +100,17 @@ public class BasketActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dbHelper.deleteAllBasketOrderData();
-                SharedPreferences sharedPreferences1= getSharedPreferences("StoreData", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=sharedPreferences1.edit();
+                SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences1.edit();
                 editor.clear();
                 editor.apply();
-                Intent intent=new Intent(BasketActivity.this, CreateOrderActivity.class);
+                Intent intent = new Intent(BasketActivity.this, CreateOrderActivity.class);
                 startActivity(intent);
             }
         });
+
+
+        getAllCheckoutData();
     }
 
 
@@ -124,5 +146,41 @@ public class BasketActivity extends AppCompatActivity {
         super.onResume();
 
     }
+
+    private void getAllCheckoutData() {
+        dataList = new ArrayList<>();
+        data = new Data();
+        for (int i = 0; i < myPojoList.size(); i++) {
+            data.setProductId(myPojoList.get(i).getId());
+            data.setProductQty(myPojoList.get(i).getQuant());
+            dataList.add(data);
+            convertList = new Gson().toJson(dataList);
+        }
+        if (Utility.isOnline(this)) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Loading Data...");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+            ServiceCaller serviceCaller = new ServiceCaller(this);
+            serviceCaller.callCheckoutData(sCategory, sCity, sDistributor, sRetailer, convertList, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    progressDialog.dismiss();
+                    if (isComplete) {
+                        Log.e("Payloads", sCategory + " , " + sCity + " , " + sDistributor + " , " + sRetailer + " , " + convertList);
+                        Toast.makeText(BasketActivity.this, "" + sCategory + " , " + sCity + " , " + sDistributor + " , " + sRetailer + " , " + convertList, Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(BasketActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
 
 }

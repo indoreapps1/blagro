@@ -40,7 +40,7 @@ public class DistributorListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_distributor_list);
-       init();
+        init();
     }
 
     private void init() {
@@ -51,7 +51,7 @@ public class DistributorListActivity extends AppCompatActivity {
         spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                sCity=parent.getSelectedItem().toString();
+                sCity = parent.getSelectedItem().toString();
                 setDistributorList();
             }
 
@@ -78,22 +78,26 @@ public class DistributorListActivity extends AppCompatActivity {
                     progressDialog.dismiss();
 //                    Toast.makeText(RetailerListActivity.this, workName, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
-                        MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                        if (myPojos != null) {
-                            myPojoList.addAll(Arrays.asList(myPojos));
-                            if (myPojoList != null && myPojoList.size() > 0) {
-                                for (MyPojo pojo : myPojoList) {
-                                    arrayList.addAll(Arrays.asList(pojo.getCity()));
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                myPojoList.addAll(Arrays.asList(myPojos));
+                                if (myPojoList != null && myPojoList.size() > 0) {
+                                    for (MyPojo pojo : myPojoList) {
+                                        arrayList.addAll(Arrays.asList(pojo.getCity()));
+                                    }
+                                    if (arrayList != null && arrayList.size() > 0) {
+                                        arrayAdapter = new ArrayAdapter(DistributorListActivity.this, android.R.layout.simple_list_item_1, arrayList);
+                                        spinner_city.setAdapter(arrayAdapter);
+                                    }
                                 }
-                                if (arrayList != null && arrayList.size() > 0) {
-                                    arrayAdapter = new ArrayAdapter(DistributorListActivity.this, android.R.layout.simple_list_item_1, arrayList);
-                                    spinner_city.setAdapter(arrayAdapter);
-                                }
+                            } else {
+                                Toast.makeText(DistributorListActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                             }
+
                         } else {
                             Toast.makeText(DistributorListActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                         }
-
                     } else {
                         Toast.makeText(DistributorListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
@@ -109,25 +113,29 @@ public class DistributorListActivity extends AppCompatActivity {
     }
 
 
-    private void setDistributorList(){
-        distributorPojoList=new ArrayList<>();
+    private void setDistributorList() {
+        distributorPojoList = new ArrayList<>();
         distributorPojoList.clear();
-        if (Utility.isOnline(this)){
+        if (Utility.isOnline(this)) {
             pb.setVisibility(View.VISIBLE);
-            ServiceCaller serviceCaller=new ServiceCaller(this);
+            ServiceCaller serviceCaller = new ServiceCaller(this);
             serviceCaller.callDistributerListService(sCity, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     pb.setVisibility(View.GONE);
-                    if (isComplete){
-                        if(!workName.trim().equalsIgnoreCase("[]")) {
-                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
-                            if (myPojos != null) {
-                                distributorPojoList.addAll(Arrays.asList(myPojos));
-                                if (distributorPojoList != null) {
-                                    distributorAdapter = new DistributorAdapter(DistributorListActivity.this, distributorPojoList);
-                                    recycle_distributorList.setLayoutManager(new LinearLayoutManager(DistributorListActivity.this));
-                                    recycle_distributorList.setAdapter(distributorAdapter);
+                    if (isComplete) {
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            if (!workName.trim().equalsIgnoreCase("[]")) {
+                                MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                                if (myPojos != null) {
+                                    distributorPojoList.addAll(Arrays.asList(myPojos));
+                                    if (distributorPojoList != null) {
+                                        distributorAdapter = new DistributorAdapter(DistributorListActivity.this, distributorPojoList);
+                                        recycle_distributorList.setLayoutManager(new LinearLayoutManager(DistributorListActivity.this));
+                                        recycle_distributorList.setAdapter(distributorAdapter);
+                                    } else {
+                                        Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                    }
                                 } else {
                                     Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                                 }
@@ -143,7 +151,7 @@ public class DistributorListActivity extends AppCompatActivity {
                 }
             });
 
-        }else {
+        } else {
             Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
         }
     }

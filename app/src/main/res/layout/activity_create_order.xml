@@ -182,7 +182,7 @@
 
                 <Spinner
                     android:id="@+id/spinner_area"
-                    style="@style/Spinner"
+                    style="@style/spinner_style"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_below="@id/txt_area"

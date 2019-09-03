@@ -22,9 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ViewRetailerOrderActivity"></activity>
-        <activity android:name=".activity.ViewDistributorOrderActivity"/>
-        <activity android:name=".activity.DistributorActivity"/>
+        <activity android:name=".activity.OrderActivity"></activity>
+        <activity android:name=".activity.ViewRetailerOrderActivity" />
+        <activity android:name=".activity.ViewDistributorOrderActivity" />
+        <activity android:name=".activity.DistributorActivity" />
         <activity android:name=".activity.RetailerActivity" />
         <activity android:name=".activity.ProfileActivity" />
         <activity android:name=".activity.BasketActivity" />

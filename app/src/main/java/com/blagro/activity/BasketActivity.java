@@ -37,7 +37,8 @@ public class BasketActivity extends AppCompatActivity {
     BasketAdapter adapter;
     List<MyPojo> myPojoList;
     LinearLayout layout_profile;
-    TextView txt_category, txt_distributor, txt_retailer, txt_city, tv_chekout;
+    TextView txt_category, txt_distributor, txt_retailer, txt_city, tv_chekout, txt_dis_id, txt_ret_id;
+    int disId, retId;
     String sCity, sCategory, sDistributor, sRetailer, convertList;
     List<Data> dataList;
     Data data;
@@ -58,6 +59,8 @@ public class BasketActivity extends AppCompatActivity {
         txt_retailer = findViewById(R.id.txt_retailer);
         txt_city = findViewById(R.id.txt_city);
         tv_chekout = findViewById(R.id.tv_chekout);
+        txt_dis_id = findViewById(R.id.txt_dis_id);
+        txt_ret_id = findViewById(R.id.txt_ret_id);
         dbHelper = new DbHelper(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -66,11 +69,15 @@ public class BasketActivity extends AppCompatActivity {
         sDistributor = sharedPreferences.getString("sharedDistributor", null);
         sRetailer = sharedPreferences.getString("sharedRetailer", null);
         sCity = sharedPreferences.getString("sharedCity", null);
+        disId = sharedPreferences.getInt("sharedDisId", 0);
+        retId = sharedPreferences.getInt("sharedRetId", 0);
         if (sCategory != null && sDistributor != null && sRetailer != null && sCity != null) {
             txt_category.setText("Product Category - " + sCategory);
             txt_distributor.setText("Distributor Name - " + sDistributor);
             txt_retailer.setText("Retailer Name - " + sRetailer);
             txt_city.setText("City - " + sCity);
+            txt_dis_id.setText("Distributor Id"+disId);
+            txt_ret_id.setText("Retailer Id"+ retId);
         } else {
             Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
         }
@@ -101,7 +108,6 @@ public class BasketActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
 
 
         getAllCheckoutData();
@@ -148,29 +154,29 @@ public class BasketActivity extends AppCompatActivity {
             data.setProductId(myPojoList.get(i).getId());
             data.setProductQty(myPojoList.get(i).getQuant());
             dataList.add(data);
-            convertList=new Gson().toJson(dataList);
+            convertList = new Gson().toJson(dataList);
         }
-        if (Utility.isOnline(this)){
-            final ProgressDialog progressDialog=new ProgressDialog(this);
+        if (Utility.isOnline(this)) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Loading Data...");
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
-            ServiceCaller serviceCaller=new ServiceCaller(this);
+            ServiceCaller serviceCaller = new ServiceCaller(this);
             serviceCaller.callCheckoutData(sCategory, sCity, sDistributor, sRetailer, convertList, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
-                    if (isComplete){
-                        Log.e("Payloads",sCategory+" , "+sCity+" , "+sDistributor+" , "+sRetailer+" , "+convertList);
-                        Toast.makeText(BasketActivity.this, ""+sCategory+" , "+sCity+" , "+sDistributor+" , "+sRetailer+" , "+convertList, Toast.LENGTH_LONG).show();
+                    if (isComplete) {
+                        Log.e("Payloads", sCategory + " , " + sCity + " , " + sDistributor + " , " + sRetailer + " , " + convertList);
+                        Toast.makeText(BasketActivity.this, "" + sCategory + " , " + sCity + " , " + sDistributor + " , " + sRetailer + " , " + convertList, Toast.LENGTH_LONG).show();
 
-                    }else {
+                    } else {
                         Toast.makeText(BasketActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-        }else {
+        } else {
             Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
         }
 

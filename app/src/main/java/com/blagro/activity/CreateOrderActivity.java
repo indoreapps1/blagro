@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import com.blagro.R;
 import com.blagro.adapter.ProductAdapter;
+import com.blagro.adapter.SpinnerDistributorAdapter;
+import com.blagro.adapter.SpinnerRetailerAdapter;
 import com.blagro.database.DbHelper;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
@@ -38,6 +40,8 @@ public class CreateOrderActivity extends AppCompatActivity {
     ArrayList<String> cityArrayList, categoryArrayList, distubterArrayList, retailerArrayList;
     List<MyPojo> cityPojoList, cateoryPojoList, productPojoList, distubterPojoList, retailerPojoList;
     ArrayAdapter<String> arrayCityAdapter, arrayCetoryAdapter;
+    SpinnerRetailerAdapter spinnerRetailerAdapter;
+    SpinnerDistributorAdapter spinnerDistributorAdapter;
     RecyclerView product_recycle;
     TextView cart_dot, txt_cart, tv_proceed;
     ProductAdapter productAdapter;
@@ -45,6 +49,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     LinearLayout layout_profile;
     RelativeLayout layout_cart;
     ProgressBar pb;
+    int retailerId, distributorId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +93,10 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinnerDistributer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                distributer = parent.getSelectedItem().toString();
+//                distributer = parent.getSelectedItem().toString();
 //                setProductList();
+                distributer = distubterPojoList.get(position).getName();
+                distributorId = distubterPojoList.get(position).getId();
                 setCategorySpinnerData();
                 storeData();
             }
@@ -103,8 +110,10 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinner_retailer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                retailer = parent.getSelectedItem().toString();
+//                retailer = parent.getSelectedItem().toString();
 //                setProductList();
+                retailer = retailerPojoList.get(position).getName();
+                retailerId = retailerPojoList.get(position).getId();
                 setCategorySpinnerData();
                 storeData();
             }
@@ -119,7 +128,8 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCategory = parent.getSelectedItem().toString();
+//                selectedCategory =  parent.getItemAtPosition(position).toString();
+                selectedCategory = cateoryPojoList.get(position).getCategory();
                 setProductList();
                 storeData();
             }
@@ -228,17 +238,6 @@ public class CreateOrderActivity extends AppCompatActivity {
                                     if (categoryArrayList != null && categoryArrayList.size() != 0) {
                                         arrayCetoryAdapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, categoryArrayList);
                                         spinner_category.setAdapter(arrayCetoryAdapter);
-//                                    spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                                        @Override
-//                                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                                            selectedCategory = parent.getItemAtPosition(position).toString();
-//                                        }
-//
-//                                        @Override
-//                                        public void onNothingSelected(AdapterView<?> parent) {
-//
-//                                        }
-//                                    });
                                     }
                                 }
                             } else {
@@ -266,6 +265,8 @@ public class CreateOrderActivity extends AppCompatActivity {
         editor.putString("sharedCategory", selectedCategory);
         editor.putString("sharedDistributor", distributer);
         editor.putString("sharedRetailer", retailer);
+        editor.putInt("sharedDisId", distributorId);
+        editor.putInt("sharedRetId", retailerId);
         editor.apply();
     }
 
@@ -287,10 +288,11 @@ public class CreateOrderActivity extends AppCompatActivity {
         if (Utility.isOnline(this)) {
             pb.setVisibility(View.VISIBLE);
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callProductListService(selectedCategory, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callProductListService("grocery", new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     pb.setVisibility(View.GONE);
+//                    Toast.makeText(CreateOrderActivity.this, "" + selectedCategory, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
                         if (!workName.trim().equalsIgnoreCase("no")) {
                             MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
@@ -321,8 +323,10 @@ public class CreateOrderActivity extends AppCompatActivity {
     }
 
     private void getDistributerList() {
-        distubterArrayList = new ArrayList<String>();
+//        distubterArrayList = new ArrayList<String>();
+//        distubterArrayList.clear();
         distubterPojoList = new ArrayList<MyPojo>();
+        distubterPojoList.clear();
         if (Utility.isOnline(this)) {
             ServiceCaller serviceCaller = new ServiceCaller(this);
             serviceCaller.callDistributerListService(city, new IAsyncWorkCompletedCallback() {
@@ -334,13 +338,16 @@ public class CreateOrderActivity extends AppCompatActivity {
                             if (myPojos != null) {
                                 distubterPojoList.addAll(Arrays.asList(myPojos));
                                 if (distubterPojoList != null && distubterPojoList.size() > 0) {
-                                    for (MyPojo pojo : distubterPojoList) {
-                                        distubterArrayList.addAll(Arrays.asList(pojo.getName()));
-                                    }
-                                    if (distubterArrayList != null && distubterArrayList.size() != 0) {
-                                        ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, distubterArrayList);
-                                        spinnerDistributer.setAdapter(adapter);
-                                    }
+                                    spinnerDistributorAdapter = new SpinnerDistributorAdapter(CreateOrderActivity.this, R.layout.listitems_layout, R.id.item_txt, distubterPojoList);
+                                    spinnerDistributer.setAdapter(spinnerDistributorAdapter);
+//                                    for (MyPojo pojo : distubterPojoList) {
+//                                        distubterArrayList.addAll(Arrays.asList(pojo.getName()));
+//                                    }
+//                                    if (distubterArrayList != null && distubterArrayList.size() != 0) {
+//                                        ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, distubterArrayList);
+//                                        spinnerDistributer.setAdapter(adapter);
+//                                    }
+
                                 }
                             } else {
                                 Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
@@ -365,8 +372,10 @@ public class CreateOrderActivity extends AppCompatActivity {
 
     private void getRetailerList() {
         if (Utility.isOnline(this)) {
-            retailerArrayList = new ArrayList<String>();
+//            retailerArrayList = new ArrayList<String>();
+//            retailerArrayList.clear();
             retailerPojoList = new ArrayList<MyPojo>();
+            retailerPojoList.clear();
             ServiceCaller serviceCaller = new ServiceCaller(this);
             serviceCaller.callRetailerListService(city, new IAsyncWorkCompletedCallback() {
                 @Override
@@ -377,18 +386,20 @@ public class CreateOrderActivity extends AppCompatActivity {
                             if (myPojos != null) {
                                 retailerPojoList.addAll(Arrays.asList(myPojos));
                                 if (retailerPojoList != null && retailerPojoList.size() > 0) {
-                                    for (MyPojo pojo : retailerPojoList) {
-                                        retailerArrayList.addAll(Arrays.asList(pojo.getName()));
-                                    }
-                                    if (retailerArrayList != null && retailerArrayList.size() != 0) {
-                                        ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, retailerArrayList);
-                                        spinner_retailer.setAdapter(adapter);
-                                    }
+                                    spinnerRetailerAdapter = new SpinnerRetailerAdapter(CreateOrderActivity.this, R.layout.listitems_layout, R.id.item_txt, retailerPojoList);
+                                    spinner_retailer.setAdapter(spinnerRetailerAdapter);
+//                                    for (MyPojo pojo : retailerPojoList) {
+//                                        retailerArrayList.addAll(Arrays.asList(pojo.getName()));
+//                                    }
+//                                    if (retailerArrayList != null && retailerArrayList.size() != 0) {
+//                                        ArrayAdapter adapter = new ArrayAdapter<String>(CreateOrderActivity.this, android.R.layout.simple_dropdown_item_1line, retailerArrayList);
+//                                        spinner_retailer.setAdapter(adapter);
+//                                    }
                                 }
                             } else {
                                 Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
-                        }else {
+                        } else {
                             Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
 

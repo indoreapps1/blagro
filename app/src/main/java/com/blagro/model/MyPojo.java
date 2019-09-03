@@ -253,7 +253,7 @@ public class MyPojo {
         this.emp_id = emp_id;
     }
 
-    private String order_no;
+    private int order_no;
 
     private String date;
 
@@ -263,12 +263,12 @@ public class MyPojo {
 
     private String order_id;
 
-    public String getOrder_no ()
+    public int getOrder_no ()
     {
         return order_no;
     }
 
-    public void setOrder_no (String order_no)
+    public void setOrder_no (int order_no)
     {
         this.order_no = order_no;
     }

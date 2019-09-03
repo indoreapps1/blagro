@@ -33,7 +33,7 @@ public class RetailerOrderAdapter extends RecyclerView.Adapter<RetailerOrderAdap
 
     @Override
     public void onBindViewHolder(@NonNull RetailerOrderAdapter.MyViewHolder myViewHolder, final int i) {
-        myViewHolder.item_no.setText(myPojoList.get(i).getOrder_no());
+        myViewHolder.item_no.setText(""+myPojoList.get(i).getOrder_no());
         myViewHolder.item_time.setText(myPojoList.get(i).getDate());
         myViewHolder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override

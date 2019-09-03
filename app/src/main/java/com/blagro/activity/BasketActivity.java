@@ -89,6 +89,10 @@ public class BasketActivity extends AppCompatActivity {
             adapter = new BasketAdapter(this, myPojoList);
             recyclerView.setAdapter(adapter);
         } else {
+            SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences1.edit();
+            editor.clear();
+            editor.apply();
             Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
         }
         layout_profile.setOnClickListener(new View.OnClickListener() {

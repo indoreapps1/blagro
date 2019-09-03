@@ -129,7 +129,7 @@ public class CreateOrderActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                selectedCategory =  parent.getItemAtPosition(position).toString();
-                selectedCategory = cateoryPojoList.get(position).getCategory();
+                selectedCategory = parent.getSelectedItem().toString();
                 setProductList();
                 storeData();
             }

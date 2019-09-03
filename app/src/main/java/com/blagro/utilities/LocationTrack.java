@@ -209,7 +209,7 @@ public class LocationTrack extends Service implements LocationListener {
         });
 
 
-        alertDialog.show();
+//        alertDialog.show();
     }
 
 

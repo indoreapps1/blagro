@@ -27,6 +27,9 @@ import com.blagro.model.MyPojo;
 import com.blagro.utilities.Contants;
 import com.blagro.utilities.Utility;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +79,8 @@ public class BasketActivity extends AppCompatActivity {
             txt_distributor.setText("Distributor Name - " + sDistributor);
             txt_retailer.setText("Retailer Name - " + sRetailer);
             txt_city.setText("City - " + sCity);
-            txt_dis_id.setText("Distributor Id"+disId);
-            txt_ret_id.setText("Retailer Id"+ retId);
+            txt_dis_id.setText("Distributor Id" + disId);
+            txt_ret_id.setText("Retailer Id" + retId);
         } else {
             Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
         }
@@ -99,18 +102,15 @@ public class BasketActivity extends AppCompatActivity {
         tv_chekout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.deleteAllBasketOrderData();
-                SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences1.edit();
-                editor.clear();
-                editor.apply();
-                Intent intent = new Intent(BasketActivity.this, CreateOrderActivity.class);
-                startActivity(intent);
+                if (myPojoList != null && myPojoList.size() > 0) {
+                    getAllCheckoutData();
+                } else {
+                    tv_chekout.setVisibility(View.GONE);
+                }
             }
         });
 
 
-        getAllCheckoutData();
     }
 
 
@@ -150,12 +150,14 @@ public class BasketActivity extends AppCompatActivity {
     private void getAllCheckoutData() {
         dataList = new ArrayList<>();
         data = new Data();
-        for (int i = 0; i < myPojoList.size(); i++) {
-            data.setProductId(myPojoList.get(i).getId());
-            data.setProductQty(myPojoList.get(i).getQuant());
+        for (MyPojo myPojo : myPojoList) {
+            data.setProductId(myPojo.getId());
+            data.setProductQty(myPojo.getQuant());
             dataList.add(data);
-            convertList = new Gson().toJson(dataList);
         }
+//        JSONArray jsonArray = new JSONArray(dataList);
+//        String jsonArrayString = jsonArray.toString();
+        convertList = new Gson().toJson(dataList);
         if (Utility.isOnline(this)) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Loading Data...");
@@ -168,9 +170,15 @@ public class BasketActivity extends AppCompatActivity {
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
                     if (isComplete) {
-                        Log.e("Payloads", sCategory + " , " + sCity + " , " + sDistributor + " , " + sRetailer + " , " + convertList);
-                        Toast.makeText(BasketActivity.this, "" + sCategory + " , " + sCity + " , " + sDistributor + " , " + sRetailer + " , " + convertList, Toast.LENGTH_LONG).show();
-
+                        Toast.makeText(BasketActivity.this, "Order Done", Toast.LENGTH_LONG).show();
+                        dbHelper.deleteAllBasketOrderData();
+                        SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences1.edit();
+                        editor.clear();
+                        editor.apply();
+                        Intent intent = new Intent(BasketActivity.this, CreateOrderActivity.class);
+                        startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(BasketActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     }
@@ -179,8 +187,5 @@ public class BasketActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
         }
-
     }
-
-
 }

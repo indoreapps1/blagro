@@ -74,43 +74,14 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/order_recycle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="5dp"
-        android:background="@color/colorWhite">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="5dp">
-
-        <TextView
-            android:id="@+id/txt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack"
-            android:textStyle="italic"
-            android:textSize="14sp"
-            android:padding="10dp"/>
-
-            <TextView
-                android:id="@+id/txt_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorBlack"
-                android:textStyle="italic"
-                android:textSize="14sp"
-                android:padding="10dp"/>
-
-        </LinearLayout>
-
-    </android.support.v7.widget.CardView>
-
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>

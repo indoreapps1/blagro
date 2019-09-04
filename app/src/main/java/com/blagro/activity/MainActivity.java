@@ -100,27 +100,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getCurrentLocation() {
-        SharedPreferences sharedPreferences = getSharedPreferences("Login", Context.MODE_PRIVATE);
-        username = sharedPreferences.getString("Username", null);
-        if (Utility.isOnline(this)) {
-            ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callAllLocationData(username, latitude, longitude, new IAsyncWorkCompletedCallback() {
-                @Override
-                public void onDone(String workName, boolean isComplete) {
-                    if (isComplete) {
-                        Toast.makeText(MainActivity.this, "" + latitude + " , " + longitude, Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-
-        } else {
-            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void getCurrentLocation() {
+//        SharedPreferences sharedPreferences = getSharedPreferences("Login", Context.MODE_PRIVATE);
+//        username = sharedPreferences.getString("Username", null);
+//        if (Utility.isOnline(this)) {
+//            ServiceCaller serviceCaller = new ServiceCaller(this);
+//            serviceCaller.callAllLocationData(username, latitude, longitude, new IAsyncWorkCompletedCallback() {
+//                @Override
+//                public void onDone(String workName, boolean isComplete) {
+//                    if (isComplete) {
+//                        Toast.makeText(MainActivity.this, "" + latitude + " , " + longitude, Toast.LENGTH_SHORT).show();
+//
+//                    } else {
+//                        Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
+//
+//        } else {
+//            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void getLocation() {
         permissions.add(ACCESS_FINE_LOCATION);
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             getLocation();
-            getCurrentLocation();
+//            getCurrentLocation();
             return null;
         }
 

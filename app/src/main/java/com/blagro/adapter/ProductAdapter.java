@@ -56,7 +56,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         myViewHolder.producGst.setText("GST- " + myPojoList.get(i).getGst());
         if (myPojoList.get(i).getCountValue() != 0) {
             myViewHolder.textView_nos.setText("" + myPojoList.get(i).getCountValue());
-            myViewHolder.textView_nos.setSelection(myPojoList.get(i).getCountValue());
+            myViewHolder.textView_nos.setSelection(myViewHolder.textView_nos.getText().toString().length());
         }
         myViewHolder.increase_Product.setOnClickListener(new View.OnClickListener() {
             @Override

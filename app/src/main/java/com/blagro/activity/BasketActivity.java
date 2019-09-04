@@ -159,6 +159,8 @@ public class BasketActivity extends AppCompatActivity {
             data.setProductQty(myPojo.getQuant());
             dataList.add(data);
         }
+        SharedPreferences sharedPreferences = getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String empId = sharedPreferences.getString("Username", null);
 //        JSONArray jsonArray = new JSONArray(dataList);
 //        String jsonArrayString = jsonArray.toString();
         convertList = new Gson().toJson(dataList);
@@ -169,23 +171,25 @@ public class BasketActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callCheckoutData(sCategory, sCity, sDistributor, sRetailer, convertList, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callCheckoutData(empId, disId, retId, convertList, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
+                    Toast.makeText(BasketActivity.this, workName, Toast.LENGTH_LONG).show();
+
                     progressDialog.dismiss();
-                    if (isComplete) {
-                        Toast.makeText(BasketActivity.this, "Order Done", Toast.LENGTH_LONG).show();
-                        dbHelper.deleteAllBasketOrderData();
-                        SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences1.edit();
-                        editor.clear();
-                        editor.apply();
-                        Intent intent = new Intent(BasketActivity.this, CreateOrderActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(BasketActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                    }
+//                    if (isComplete) {
+//                        Toast.makeText(BasketActivity.this, "Order Done", Toast.LENGTH_LONG).show();
+//                        dbHelper.deleteAllBasketOrderData();
+//                        SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = sharedPreferences1.edit();
+//                        editor.clear();
+//                        editor.apply();
+//                        Intent intent = new Intent(BasketActivity.this, CreateOrderActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    } else {
+//                        Toast.makeText(BasketActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+//                    }
                 }
             });
         } else {

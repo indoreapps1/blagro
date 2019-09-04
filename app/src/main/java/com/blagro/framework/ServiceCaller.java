@@ -225,15 +225,14 @@ public class ServiceCaller {
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
 
-    public void callCheckoutData(final String category, final String city, final String distributor, final String retailer, final String list, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/createOrder";
+    public void callCheckoutData(final String Emp_id,  final int distributor_id, final int retailer_id, final String list, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/order";
         JSONObject obj = new JSONObject();
         try {
-            obj.put("city", city);
-            obj.put("category", category);
-            obj.put("distributor", distributor);
-            obj.put("retailer", retailer);
-            obj.put("list", list);
+            obj.put("Emp_id", Emp_id);
+            obj.put("distributor_id", distributor_id);
+            obj.put("retailer_id", retailer_id);
+            obj.put("dt", list);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -245,7 +244,7 @@ public class ServiceCaller {
                 if (result != null) {
                     workCompletedCallback.onDone(result, true);
                 } else {
-                    workCompletedCallback.onDone("callNewsUrlService done", false);
+                    workCompletedCallback.onDone(error, false);
                 }
             }
         });

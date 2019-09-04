@@ -232,5 +232,20 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/msgView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="LatLong"
+        android:textColor="@color/colorSkyBue"
+        android:textSize="14sp"
+        android:textStyle="bold|italic"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:visibility="gone"/>
+
 
 </RelativeLayout>

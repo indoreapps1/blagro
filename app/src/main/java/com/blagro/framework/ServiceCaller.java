@@ -152,7 +152,7 @@ public class ServiceCaller {
     }
 
 
-    public void callAllLocationData(final String username, final double lat, final double lon, final IAsyncWorkCompletedCallback workCompletedCallback) {
+    public void callAllLocationData(final String username, final String lat, final String lon, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final String url = "http://blapi2.veteransoftwares.com/api/location?username=" + username + "&lang=" + lon + "&lat=" + lat;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

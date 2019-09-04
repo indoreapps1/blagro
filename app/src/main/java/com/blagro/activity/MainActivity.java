@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        new GetLocation().execute();
+//        new GetLocation().execute();
     }
 
 

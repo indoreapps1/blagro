@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         edt_username.setText("");
                                         edt_pass.setText("");
+                                        finish();
                                     }else {
                                         Toast.makeText(LoginActivity.this, "Please enter correct details", Toast.LENGTH_SHORT).show();
                                     }

@@ -175,7 +175,6 @@ public class BasketActivity extends AppCompatActivity {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     Toast.makeText(BasketActivity.this, workName, Toast.LENGTH_LONG).show();
-
                     progressDialog.dismiss();
 //                    if (isComplete) {
 //                        Toast.makeText(BasketActivity.this, "Order Done", Toast.LENGTH_LONG).show();

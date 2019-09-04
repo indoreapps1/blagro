@@ -208,7 +208,7 @@ public class ServiceCaller {
     }
 
     public void callAllOrderData(final int orderno, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        String url = "http://blapi2.veteransoftwares.com/api/border?order_no=" + orderno;
+        String url = "http://blapi2.veteransoftwares.com/api/aorder?order_no=" + orderno;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -225,8 +225,8 @@ public class ServiceCaller {
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
 
-    public void callCheckoutData(final String category, final String city, final String distributor, final String retailer, final String list, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/createOrder";
+    public void callCheckoutData(final String city, final String category, final int distributor, final int retailer, final String list, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/order?distributor=" + distributor + "&retailer=" + retailer + "&list=" + list;
         JSONObject obj = new JSONObject();
         try {
             obj.put("city", city);

@@ -169,7 +169,7 @@ public class BasketActivity extends AppCompatActivity {
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callCheckoutData(sCategory, sCity, sDistributor, sRetailer, convertList, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callCheckoutData(sCity, sCategory, disId, retId, convertList, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();

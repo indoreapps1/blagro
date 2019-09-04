@@ -33,8 +33,8 @@ public class DistributorOrderAdapter extends RecyclerView.Adapter<DistributorOrd
 
     @Override
     public void onBindViewHolder(@NonNull DistributorOrderAdapter.MyViewHolder myViewHolder, final int i) {
-        myViewHolder.item_no.setText(""+myPojoList.get(i).getOrder_no());
-        myViewHolder.item_time.setText(myPojoList.get(i).getDate());
+        myViewHolder.item_no.setText("Order Number - "+myPojoList.get(i).getOrder_no());
+        myViewHolder.item_time.setText("Oeder Date - "+myPojoList.get(i).getDate());
         myViewHolder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

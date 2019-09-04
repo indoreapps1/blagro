@@ -313,4 +313,29 @@ public class MyPojo {
         this.order_id = order_id;
     }
 
+    private String qrt;
+
+    private String pro_id;
+
+
+    public String getQrt ()
+    {
+        return qrt;
+    }
+
+    public void setQrt (String qrt)
+    {
+        this.qrt = qrt;
+    }
+
+    public String getPro_id ()
+    {
+        return pro_id;
+    }
+
+    public void setPro_id (String pro_id)
+    {
+        this.pro_id = pro_id;
+    }
+
 }

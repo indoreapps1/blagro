@@ -19,7 +19,6 @@ import java.util.List;
 
 public class OrderActivity extends AppCompatActivity {
     TextView txt, txt_1;
-    List<MyPojo> myPojoList;
     int orderID;
 
     @Override
@@ -34,7 +33,6 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void setOrderData() {
-        myPojoList = new ArrayList<>();
         if (Utility.isOnline(this)) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Loading Orders...");
@@ -42,21 +40,22 @@ public class OrderActivity extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callAllOrderData(orderID, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callAllOrderData(101, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
                     if (isComplete) {
-                        if (workName.trim().equalsIgnoreCase("")) {
+//                        if (workName.trim().equalsIgnoreCase("")) {
                             MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                             if (myPojos != null){
+                                txt.setText("Order Number - " +myPojos[0].getOrder_no());
 
                             }else {
                                 Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
-                        }
+//                        } else {
+//                            Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
+//                        }
                     } else {
                         Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
                     }

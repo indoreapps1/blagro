@@ -2,23 +2,23 @@ package com.blagro.model;
 
 public class Data {
 
-    private int productId;
+    private int pro_id;
 
-    private int productQty;
+    private int qrt;
 
     public int getProductId() {
-        return productId;
+        return pro_id;
     }
 
     public void setProductId(int productId) {
-        this.productId = productId;
+        this.pro_id = productId;
     }
 
     public int getProductQty() {
-        return productQty;
+        return qrt;
     }
 
     public void setProductQty(int productQty) {
-        this.productQty = productQty;
+        this.qrt = productQty;
     }
 }

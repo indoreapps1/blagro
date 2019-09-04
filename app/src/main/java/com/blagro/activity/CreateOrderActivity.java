@@ -93,12 +93,16 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinnerDistributer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                distributer = parent.getSelectedItem().toString();
+                distributer = parent.getSelectedItem().toString();
 //                setProductList();
-                distributer = distubterPojoList.get(position).getName();
-                distributorId = distubterPojoList.get(position).getId();
-                setCategorySpinnerData();
-                storeData();
+//                distributer = distubterPojoList.get(position).getName();
+                try {
+                    distributorId = distubterPojoList.get(position).getId();
+                    setCategorySpinnerData();
+                    storeData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -109,7 +113,8 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         spinner_retailer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position,
+                                       long id) {
 //                retailer = parent.getSelectedItem().toString();
 //                setProductList();
                 retailer = retailerPojoList.get(position).getName();
@@ -127,7 +132,8 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position,
+                                       long id) {
 //                selectedCategory =  parent.getItemAtPosition(position).toString();
                 selectedCategory = parent.getSelectedItem().toString();
                 setProductList();
@@ -288,11 +294,10 @@ public class CreateOrderActivity extends AppCompatActivity {
         if (Utility.isOnline(this)) {
             pb.setVisibility(View.VISIBLE);
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callProductListService("grocery", new IAsyncWorkCompletedCallback() {
+            serviceCaller.callProductListService(selectedCategory, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     pb.setVisibility(View.GONE);
-//                    Toast.makeText(CreateOrderActivity.this, "" + selectedCategory, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
                         if (!workName.trim().equalsIgnoreCase("no")) {
                             MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
@@ -303,6 +308,10 @@ public class CreateOrderActivity extends AppCompatActivity {
                                     product_recycle.setLayoutManager(new LinearLayoutManager(CreateOrderActivity.this));
                                     product_recycle.setAdapter(productAdapter);
                                 }
+                            } else {
+                                productAdapter = new ProductAdapter(CreateOrderActivity.this, productPojoList);
+                                product_recycle.setLayoutManager(new LinearLayoutManager(CreateOrderActivity.this));
+                                product_recycle.setAdapter(productAdapter);
                             }
                         } else {
                             Toast.makeText(CreateOrderActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
@@ -350,6 +359,8 @@ public class CreateOrderActivity extends AppCompatActivity {
 
                                 }
                             } else {
+                                spinnerDistributorAdapter = new SpinnerDistributorAdapter(CreateOrderActivity.this, R.layout.listitems_layout, R.id.item_txt, distubterPojoList);
+                                spinnerDistributer.setAdapter(spinnerDistributorAdapter);
                                 Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
@@ -397,7 +408,9 @@ public class CreateOrderActivity extends AppCompatActivity {
 //                                    }
                                 }
                             } else {
-                                Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                spinnerRetailerAdapter = new SpinnerRetailerAdapter(CreateOrderActivity.this, R.layout.listitems_layout, R.id.item_txt, retailerPojoList);
+                                spinner_retailer.setAdapter(spinnerRetailerAdapter);
+//                                Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();

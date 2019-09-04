@@ -34,7 +34,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public void setActionListener(ProductItemActionListener actionListener) {
         this.actionListener = actionListener;
     }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {

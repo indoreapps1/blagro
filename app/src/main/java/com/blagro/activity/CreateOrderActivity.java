@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +23,7 @@ import com.blagro.R;
 import com.blagro.adapter.ProductAdapter;
 import com.blagro.adapter.SpinnerDistributorAdapter;
 import com.blagro.adapter.SpinnerRetailerAdapter;
+import com.blagro.adapter.SpinnerSubCategoryAdapter;
 import com.blagro.database.DbHelper;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
@@ -36,12 +38,13 @@ import java.util.List;
 
 public class CreateOrderActivity extends AppCompatActivity {
 
-    Spinner spinner_city, spinnerDistributer, spinner_category, spinner_retailer;
-    ArrayList<String> cityArrayList, categoryArrayList, distubterArrayList, retailerArrayList;
-    List<MyPojo> cityPojoList, cateoryPojoList, productPojoList, distubterPojoList, retailerPojoList;
+    Spinner spinner_city, spinnerDistributer, spinner_category, spinner_retailer, spinner_subCategory;
+    ArrayList<String> cityArrayList, categoryArrayList, distubterArrayList, retailerArrayList, subCategoryArrayList;
+    List<MyPojo> cityPojoList, cateoryPojoList, productPojoList, distubterPojoList, retailerPojoList, subCategoryPojoList;
     ArrayAdapter<String> arrayCityAdapter, arrayCetoryAdapter;
     SpinnerRetailerAdapter spinnerRetailerAdapter;
     SpinnerDistributorAdapter spinnerDistributorAdapter;
+    SpinnerSubCategoryAdapter subCategoryAdapter;
     RecyclerView product_recycle;
     TextView cart_dot, txt_cart, tv_proceed;
     ProductAdapter productAdapter;
@@ -49,7 +52,7 @@ public class CreateOrderActivity extends AppCompatActivity {
     LinearLayout layout_profile;
     RelativeLayout layout_cart;
     ProgressBar pb;
-    int retailerId, distributorId;
+    int retailerId, distributorId, subCategoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +72,16 @@ public class CreateOrderActivity extends AppCompatActivity {
         tv_proceed = findViewById(R.id.tv_proceed);
         layout_profile = findViewById(R.id.layout_profile);
         layout_cart = findViewById(R.id.layout_cart);
+        spinner_subCategory = findViewById(R.id.spinner_subCategory);
         pb = findViewById(R.id.pb);
-        product_recycle.setLayoutManager(new LinearLayoutManager(this));
         setCitySpinnerData();
-//        setCategorySpinnerData();
+        setCategorySpinnerData();
 
         spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 city = parent.getSelectedItem().toString();
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
                 getDistributerList();
                 getRetailerList();
                 storeData();
@@ -93,12 +97,12 @@ public class CreateOrderActivity extends AppCompatActivity {
         spinnerDistributer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                distributer = parent.getSelectedItem().toString();
+//                distributer = parent.getSelectedItem().toString();
 //                setProductList();
-//                distributer = distubterPojoList.get(position).getName();
                 try {
+                    distributer = distubterPojoList.get(position).getName();
                     distributorId = distubterPojoList.get(position).getId();
-                    setCategorySpinnerData();
+//                    setCategorySpinnerData();
                     storeData();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -113,13 +117,12 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         spinner_retailer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                       long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                retailer = parent.getSelectedItem().toString();
 //                setProductList();
                 retailer = retailerPojoList.get(position).getName();
                 retailerId = retailerPojoList.get(position).getId();
-                setCategorySpinnerData();
+//                setCategorySpinnerData();
                 storeData();
             }
 
@@ -132,12 +135,25 @@ public class CreateOrderActivity extends AppCompatActivity {
 
         spinner_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position,
-                                       long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                selectedCategory =  parent.getItemAtPosition(position).toString();
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
                 selectedCategory = parent.getSelectedItem().toString();
                 setProductList();
                 storeData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinner_subCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) parent.getChildAt(0)).setGravity(Gravity.CENTER);
+
             }
 
             @Override
@@ -410,6 +426,45 @@ public class CreateOrderActivity extends AppCompatActivity {
                             } else {
                                 spinnerRetailerAdapter = new SpinnerRetailerAdapter(CreateOrderActivity.this, R.layout.listitems_layout, R.id.item_txt, retailerPojoList);
                                 spinner_retailer.setAdapter(spinnerRetailerAdapter);
+//                                Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(CreateOrderActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+        } else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void getSubCategoryList() {
+        if (Utility.isOnline(this)) {
+            subCategoryPojoList = new ArrayList<MyPojo>();
+            subCategoryPojoList.clear();
+            ServiceCaller serviceCaller = new ServiceCaller(this);
+            serviceCaller.callSubCategoryListService(selectedCategory, new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    if (isComplete) {
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                subCategoryPojoList.addAll(Arrays.asList(myPojos));
+                                if (subCategoryPojoList != null && subCategoryPojoList.size() > 0) {
+                                    subCategoryAdapter = new SpinnerSubCategoryAdapter(CreateOrderActivity.this, R.layout.listitems_layout, R.id.item_txt, subCategoryPojoList);
+                                    spinner_subCategory.setAdapter(subCategoryAdapter);
+                                }
+                            } else {
+                                subCategoryAdapter = new SpinnerSubCategoryAdapter(CreateOrderActivity.this, R.layout.listitems_layout, R.id.item_txt, subCategoryPojoList);
+                                spinner_subCategory.setAdapter(subCategoryAdapter);
 //                                Toast.makeText(CreateOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {

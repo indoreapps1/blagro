@@ -133,6 +133,24 @@ public class ServiceCaller {
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
 
+    public void callSubCategoryListService(final String category, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                workCompletedCallback.onDone(response, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                workCompletedCallback.onDone(error.getMessage(), false);
+            }
+        });
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
+    }
+
     public void callGetProfileData(final String username, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final String url = "http://blapi2.veteransoftwares.com/api/emp?emp_code=" + username;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -225,7 +243,7 @@ public class ServiceCaller {
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
 
-    public void callCheckoutData(final String Emp_id,  final int distributor_id, final int retailer_id, final String list, final IAsyncWorkCompletedCallback workCompletedCallback) {
+    public void callCheckoutData(final String Emp_id, final int distributor_id, final int retailer_id, final String list, final IAsyncWorkCompletedCallback workCompletedCallback) {
         final String url = "http://blapi2.veteransoftwares.com/api/order";
         JSONObject obj = new JSONObject();
         try {

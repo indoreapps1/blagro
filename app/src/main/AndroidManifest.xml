@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.OrderActivity"></activity>
+        <activity android:name=".activity.Main2Activity"></activity>
+        <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.ViewRetailerOrderActivity" />
         <activity android:name=".activity.ViewDistributorOrderActivity" />
         <activity android:name=".activity.DistributorActivity" />
@@ -41,7 +42,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity" />
-
     </application>
 
 </manifest>

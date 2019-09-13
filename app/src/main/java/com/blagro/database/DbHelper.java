@@ -22,7 +22,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = Contants.DATABASE_NAME;
 
     public DbHelper(Context context) {
@@ -42,7 +42,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_MyOrder_TABLE = "CREATE TABLE MyOrderDataEntity(id INTEGER, product_name TEXT, product_unit TEXT, product_gst TEXT, category TEXT, Quantity REAL,gst TEXT)";
+        String CREATE_MyOrder_TABLE = "CREATE TABLE MyOrderDataEntity(id INTEGER, product_name TEXT, product_unit TEXT, product_gst TEXT, category TEXT, Quantity REAL,gst TEXT,item_code TEXT)";
         db.execSQL(CREATE_MyOrder_TABLE);
 
     }
@@ -71,6 +71,7 @@ public class DbHelper extends SQLiteOpenHelper {
         ob.setCategory(cursor.getString(4));
         ob.setQuant(cursor.getInt(5));
         ob.setGst(cursor.getString(6));
+        ob.setItem_code(cursor.getString(7));
     }
 
     //show  Basket Order list data
@@ -133,6 +134,7 @@ public class DbHelper extends SQLiteOpenHelper {
         values.put("category", ob.getCategory());
         values.put("Quantity", ob.getQuant());
         values.put("gst", ob.getGst());
+        values.put("item_code", ob.getItem_code());
 
     }
 

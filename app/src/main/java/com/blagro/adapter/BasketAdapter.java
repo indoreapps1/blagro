@@ -2,6 +2,7 @@ package com.blagro.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.blagro.R;
 import com.blagro.activity.CreateOrderActivity;
+import com.blagro.activity.Main2Activity;
 import com.blagro.database.DbHelper;
 import com.blagro.model.MyPojo;
 
@@ -49,7 +51,11 @@ public class BasketAdapter extends RecyclerView.Adapter<BasketAdapter.MyViewHold
                 dbHelper.deleteBasketOrderDataById(myPojoList.get(i).getId());
                 myPojoList.remove(i);
                 if (myPojoList.size() == 0) {
-                    Intent intent = new Intent(context, CreateOrderActivity.class);
+                    SharedPreferences sharedPreferences1 = context.getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences1.edit();
+                    editor.clear();
+                    editor.apply();
+                    Intent intent = new Intent(context, Main2Activity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     context.startActivity(intent);
                 } else {

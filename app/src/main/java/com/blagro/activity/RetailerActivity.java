@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.blagro.R;
+import com.blagro.adapter.AreaAdapter;
 import com.blagro.adapter.RetailerAdapter;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
@@ -27,14 +29,15 @@ import java.util.List;
 
 public class RetailerActivity extends AppCompatActivity {
     RecyclerView recycle_retailerList;
-    Spinner spinner_city;
-    ArrayList<String> arrayList;
-    List<MyPojo> myPojoList, retailerPojoList;
+    Spinner spinner_city, spinner_area;
+    ArrayList<String> arrayList, areaList;
+    List<MyPojo> myPojoList, retailerPojoList, areaPojoList;
     ArrayAdapter<String> arrayAdapter;
     RetailerAdapter retailerAdapter;
     ProgressBar pb;
     String sCity;
-
+    int aArea;
+    SearchView search;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +49,27 @@ public class RetailerActivity extends AppCompatActivity {
     private void init() {
         recycle_retailerList = findViewById(R.id.recycle_retailerList);
         spinner_city = findViewById(R.id.spinner_city);
+        spinner_area = findViewById(R.id.spinner_area);
         pb = findViewById(R.id.pb);
-        setSpinnerData();
+        search =findViewById(R.id.search);
+        getAreaData();
+        spinner_area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    aArea = areaPojoList.get(position).getId();
+//                  aArea = parent.getSelectedItem().toString();
+                    setSpinnerData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -60,6 +82,56 @@ public class RetailerActivity extends AppCompatActivity {
 
             }
         });
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+                if (retailerAdapter != null) {
+                    retailerAdapter.getFilter().filter(text);
+                }
+                return true;
+            }
+
+        });
+    }
+
+    private void getAreaData() {
+        areaPojoList = new ArrayList<MyPojo>();
+        areaPojoList.clear();
+        if (Utility.isOnline(this)) {
+            ServiceCaller serviceCaller = new ServiceCaller(RetailerActivity.this);
+            serviceCaller.callAreaListService(new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    if (isComplete) {
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                areaPojoList.addAll(Arrays.asList(myPojos));
+                                if (areaPojoList != null && areaPojoList.size() > 0) {
+                                    AreaAdapter arrayAdapter = new AreaAdapter(RetailerActivity.this, android.R.layout.simple_dropdown_item_1line, R.id.item_txt, areaPojoList);
+                                    spinner_area.setAdapter(arrayAdapter);
+                                }
+                            } else {
+                                Toast.makeText(RetailerActivity.this, "No Area Found", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(RetailerActivity.this, "No Area Found", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        } else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private List<String> setSpinnerData() {
@@ -72,13 +144,12 @@ public class RetailerActivity extends AppCompatActivity {
             progressDialog.setMessage("Fetching Cities...");
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(RetailerActivity.this);
-            serviceCaller.callCityListService(new IAsyncWorkCompletedCallback() {
+            serviceCaller.callCityListService(String.valueOf(aArea), new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
-//                    Toast.makeText(RetailerListActivity.this, workName, Toast.LENGTH_SHORT).show();
                     if (isComplete) {
-                        if (!workName.trim().equalsIgnoreCase("no")) {
+                        if (!workName.trim().equalsIgnoreCase("[]")) {
                             MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                             if (myPojos != null) {
                                 myPojoList.addAll(Arrays.asList(myPojos));
@@ -86,19 +157,21 @@ public class RetailerActivity extends AppCompatActivity {
                                     for (MyPojo pojo : myPojoList) {
                                         arrayList.addAll(Arrays.asList(pojo.getCity()));
                                     }
-                                    if (arrayList != null && arrayList.size() > 0) {
-                                        arrayAdapter = new ArrayAdapter<String>(RetailerActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
-                                        spinner_city.setAdapter(arrayAdapter);
-                                    }
+                                    arrayAdapter = new ArrayAdapter<String>(RetailerActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
+                                    spinner_city.setAdapter(arrayAdapter);
                                 }
                             } else {
                                 Toast.makeText(RetailerActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
+                            arrayAdapter = new ArrayAdapter<String>(RetailerActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
+                            spinner_city.setAdapter(arrayAdapter);
                             Toast.makeText(RetailerActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(RetailerActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        arrayAdapter = new ArrayAdapter<String>(RetailerActivity.this, android.R.layout.simple_dropdown_item_1line, arrayList);
+                        spinner_city.setAdapter(arrayAdapter);
+                        Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -126,24 +199,22 @@ public class RetailerActivity extends AppCompatActivity {
                                 MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                                 if (myPojos != null) {
                                     retailerPojoList.addAll(Arrays.asList(myPojos));
-                                    if (retailerPojoList != null) {
-                                        retailerAdapter = new RetailerAdapter(RetailerActivity.this, retailerPojoList);
-                                        recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerActivity.this));
-                                        recycle_retailerList.setAdapter(retailerAdapter);
-                                    } else {
-                                        Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
-                                    }
+                                    setAdapter();
                                 } else {
+                                    setAdapter();
                                     Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
+                                setAdapter();
                                 Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
-                        }else {
+                        } else {
+                            setAdapter();
                             Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(RetailerActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        setAdapter();
+                        Toast.makeText(RetailerActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -151,5 +222,11 @@ public class RetailerActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setAdapter() {
+        retailerAdapter = new RetailerAdapter(RetailerActivity.this, retailerPojoList, true);
+        recycle_retailerList.setLayoutManager(new LinearLayoutManager(RetailerActivity.this));
+        recycle_retailerList.setAdapter(retailerAdapter);
     }
 }

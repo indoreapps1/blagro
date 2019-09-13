@@ -1,20 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/blur_bg"
+    android:orientation="vertical"
     tools:context=".activity.ViewRetailerOrderActivity">
 
+    <RadioGroup
+        android:id="@+id/radio_grp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/drawable_login"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/Delivered"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.25"
+            android:buttonTint="@color/colorWhite"
+            android:checked="true"
+            android:hint="Delivered"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="10sp"
+            android:textStyle="normal" />
+
+        <RadioButton
+            android:id="@+id/Approve"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.25"
+            android:buttonTint="@color/colorWhite"
+            android:hint="Approve"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="10sp"
+            android:textStyle="normal" />
+
+        <RadioButton
+            android:id="@+id/Pending"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.25"
+            android:buttonTint="@color/colorWhite"
+            android:hint="Pending"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="10sp"
+            android:textStyle="normal" />
+
+        <RadioButton
+            android:id="@+id/Cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.25"
+            android:buttonTint="@color/colorWhite"
+            android:hint="Cancel"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="10sp"
+            android:textStyle="normal" />
+
+
+    </RadioGroup>
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:gravity="center"
+        android:layout_gravity="end"
+        app:queryHint="search..."
+        android:layout_margin="5dp"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/view_order_recycle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="20dp">
 

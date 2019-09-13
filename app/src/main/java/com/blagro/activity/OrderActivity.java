@@ -46,12 +46,12 @@ public class OrderActivity extends AppCompatActivity {
             progressDialog.setCancelable(false);
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callAllOrderData(101, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callAllOrderData(orderNo, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
                     if (isComplete) {
-//                        if (workName.trim().equalsIgnoreCase("")) {
+                        if (!workName.trim().equalsIgnoreCase("[]")) {
                         MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                         if (myPojos != null) {
                             myPojoList.addAll(Arrays.asList(myPojos));
@@ -66,9 +66,9 @@ public class OrderActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
                         }
-//                        } else {
-//                            Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
-//                        }
+                        } else {
+                            Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(OrderActivity.this, "No Orders Found", Toast.LENGTH_SHORT).show();
                     }

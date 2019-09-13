@@ -45,8 +45,26 @@ public class ServiceCaller {
     }
 
 
-    public void callCityListService(final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/city";
+    public void callCityListService(final String area, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/city?area=" + area;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                workCompletedCallback.onDone(response, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                workCompletedCallback.onDone(error.getMessage(), false);
+            }
+        });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
+    }
+
+
+    public void callAreaListService(final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/area";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -82,7 +100,7 @@ public class ServiceCaller {
 
 
     public void callProductListService(final String category, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/product?category=" + category;
+        final String url = "http://blapi2.veteransoftwares.com/api/product?sub_cat=" + category;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -134,7 +152,7 @@ public class ServiceCaller {
     }
 
     public void callSubCategoryListService(final String category, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "";
+        final String url = "http://blapi2.veteransoftwares.com/api/sub_cat?category=" + category;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -188,8 +206,8 @@ public class ServiceCaller {
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
 
-    public void callViewRetailerOrderData(final int id, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        String url = "http://blapi2.veteransoftwares.com/api/retailer1?retailer_id=" + id;
+    public void callViewRetailerOrderData(final int id, final String status, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        String url = "http://blapi2.veteransoftwares.com/api/retailer1?retailer_id=" + id + "&status=" + status;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -207,8 +225,26 @@ public class ServiceCaller {
     }
 
 
-    public void callViewDistributorOrderData(final int id, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        String url = "http://blapi2.veteransoftwares.com/api/distributer1?distributor_id=" + id;
+    public void callViewDistributorOrderData(final int id, final String status, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        String url = "http://blapi2.veteransoftwares.com/api/distributer1?distributor_id=" + id + "&status=" + status;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                workCompletedCallback.onDone(response, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                workCompletedCallback.onDone(error.getMessage(), false);
+            }
+        });
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
+    }
+
+    public void callViewMyOrderData(final String id, final String status, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        String url = "http://blapi2.veteransoftwares.com/api/employe?emp_id=" + id + "&status=" + status;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -243,30 +279,39 @@ public class ServiceCaller {
         AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
 
-    public void callCheckoutData(final String Emp_id, final int distributor_id, final int retailer_id, final String list, final IAsyncWorkCompletedCallback workCompletedCallback) {
-        final String url = "http://blapi2.veteransoftwares.com/api/order";
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("Emp_id", Emp_id);
-            obj.put("distributor_id", distributor_id);
-            obj.put("retailer_id", retailer_id);
-            obj.put("dt", list);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d(Contants.LOG_TAG, "Payload*****" + obj);
-        new ServiceHelper().callService(url, obj, new IServiceSuccessCallback() {
+    public void callCheckoutData(final String Emp_id, final int distributor_id, final int retailer_id, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/order?emp_id=" + Emp_id + "&distributor_id=" + distributor_id + "&retailer_id=" + retailer_id;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
-            public void onDone(String doneWhatCode, String result, String error) {
-                if (result != null) {
-                    workCompletedCallback.onDone(result, true);
-                } else {
-                    workCompletedCallback.onDone(error, false);
-                }
+            public void onResponse(String response) {
+                workCompletedCallback.onDone(response, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                workCompletedCallback.onDone(error.getMessage(), false);
             }
         });
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
     }
 
-}
+    public void callCheckoutItemsData(final String orerno, final String id, final int qty, final IAsyncWorkCompletedCallback workCompletedCallback) {
+        final String url = "http://blapi2.veteransoftwares.com/api/order_item?order_no=" + orerno + "&pro_id=" + id + "&qrt=" + qty;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                workCompletedCallback.onDone(response, true);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                workCompletedCallback.onDone(error.getMessage(), false);
+            }
+        });
 
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        AppController.getInstance().addToRequestQueue(stringRequest);//, tag_json_obj);
+    }
+}

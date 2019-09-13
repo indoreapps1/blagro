@@ -13,11 +13,11 @@ import com.blagro.model.MyPojo;
 
 import java.util.List;
 
-public class SpinnerSubCategoryAdapter extends ArrayAdapter<MyPojo> {
+public class SpinnerProductAdapter extends ArrayAdapter<MyPojo> {
 
     LayoutInflater flater;
 
-    public SpinnerSubCategoryAdapter(Activity context, int resouceId, int textviewId, List<MyPojo> list){
+    public SpinnerProductAdapter(Activity context, int resouceId, int textviewId, List<MyPojo> list){
         super(context,resouceId,textviewId, list);
 //        flater = context.getLayoutInflater();
     }
@@ -49,7 +49,7 @@ public class SpinnerSubCategoryAdapter extends ArrayAdapter<MyPojo> {
         }else{
             holder = (viewHolder) rowview.getTag();
         }
-        holder.item_txt.setText(myPojo.getSubCat());
+        holder.item_txt.setText(myPojo.getName());
 
         return rowview;
     }

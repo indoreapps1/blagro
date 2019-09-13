@@ -1,5 +1,6 @@
 package com.blagro.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,9 +42,9 @@ public class BasketActivity extends AppCompatActivity {
     BasketAdapter adapter;
     List<MyPojo> myPojoList;
     LinearLayout layout_profile;
-    TextView txt_category, txt_distributor, txt_retailer, txt_city, tv_chekout, txt_dis_id, txt_ret_id;
+    TextView txt_category, txt_distributor, txt_retailer, txt_city, tv_chekout, txt_dis_id, txt_ret_id, txt_subcategory;
     int disId, retId;
-    String sCity, sCategory, sDistributor, sRetailer, convertList;
+    String sCity, sCategory, sDistributor, sRetailer, subCategory;
     List<Data> dataList;
     Data data;
 
@@ -58,6 +60,7 @@ public class BasketActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         layout_profile = findViewById(R.id.layout_profile);
         txt_category = findViewById(R.id.txt_category);
+        txt_subcategory = findViewById(R.id.txt_subcategory);
         txt_distributor = findViewById(R.id.txt_distributor);
         txt_retailer = findViewById(R.id.txt_retailer);
         txt_city = findViewById(R.id.txt_city);
@@ -71,28 +74,31 @@ public class BasketActivity extends AppCompatActivity {
         sCategory = sharedPreferences.getString("sharedCategory", null);
         sDistributor = sharedPreferences.getString("sharedDistributor", null);
         sRetailer = sharedPreferences.getString("sharedRetailer", null);
+        subCategory = sharedPreferences.getString("subCategory", null);
         sCity = sharedPreferences.getString("sharedCity", null);
         disId = sharedPreferences.getInt("sharedDisId", 0);
         retId = sharedPreferences.getInt("sharedRetId", 0);
-        if (sCategory != null && sDistributor != null && sRetailer != null && sCity != null) {
+        if (sCategory != null && sDistributor != null && sRetailer != null && sCity != null && subCategory != null) {
             txt_category.setText("Product Category - " + sCategory);
+            txt_subcategory.setText("Sub Category - " + subCategory);
             txt_distributor.setText("Distributor Name - " + sDistributor);
             txt_retailer.setText("Retailer Name - " + sRetailer);
             txt_city.setText("City - " + sCity);
             txt_dis_id.setText("Distributor Id" + disId);
             txt_ret_id.setText("Retailer Id" + retId);
         } else {
-            Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
+//            dbHelper.deleteAllBasketOrderData();
         }
         myPojoList = dbHelper.GetAllBasketOrderData();
         if (myPojoList != null && myPojoList.size() > 0) {
+//            Toast.makeText(this, myPojoList.size()+"", Toast.LENGTH_SHORT).show();
             adapter = new BasketAdapter(this, myPojoList);
             recyclerView.setAdapter(adapter);
         } else {
-            SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences1.edit();
-            editor.clear();
-            editor.apply();
+//            SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = sharedPreferences1.edit();
+//            editor.clear();
+//            editor.apply();
             Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
         }
         layout_profile.setOnClickListener(new View.OnClickListener() {
@@ -107,9 +113,11 @@ public class BasketActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (myPojoList != null && myPojoList.size() > 0) {
-                    getAllCheckoutData();
-                } else {
-                    tv_chekout.setVisibility(View.GONE);
+                    if (disId != 0 && retId != 0) {
+                        getAllCheckoutData();
+                    } else {
+                        Toast.makeText(BasketActivity.this, "Please Select products", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -152,47 +160,65 @@ public class BasketActivity extends AppCompatActivity {
     }
 
     private void getAllCheckoutData() {
-        dataList = new ArrayList<>();
-        data = new Data();
-        for (MyPojo myPojo : myPojoList) {
-            data.setProductId(myPojo.getId());
-            data.setProductQty(myPojo.getQuant());
-            dataList.add(data);
-        }
         SharedPreferences sharedPreferences = getSharedPreferences("Login", Context.MODE_PRIVATE);
         String empId = sharedPreferences.getString("Username", null);
-//        JSONArray jsonArray = new JSONArray(dataList);
-//        String jsonArrayString = jsonArray.toString();
-        convertList = new Gson().toJson(dataList);
         if (Utility.isOnline(this)) {
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Loading Data...");
+            progressDialog.setMessage("Create Order Data...");
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callCheckoutData(empId, disId, retId, convertList, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callCheckoutData(empId, disId, retId, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
-                    Toast.makeText(BasketActivity.this, workName, Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
-//                    if (isComplete) {
-//                        Toast.makeText(BasketActivity.this, "Order Done", Toast.LENGTH_LONG).show();
-//                        dbHelper.deleteAllBasketOrderData();
-//                        SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = sharedPreferences1.edit();
-//                        editor.clear();
-//                        editor.apply();
-//                        Intent intent = new Intent(BasketActivity.this, CreateOrderActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    } else {
-//                        Toast.makeText(BasketActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-//                    }
+                    String s1 = workName.substring(1);
+                    String s2 = s1.substring(0, s1.length() - 1);
+                    uploadItems(s2);
                 }
             });
         } else {
             Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void uploadItems(String orderno) {
+        ServiceCaller serviceCaller = new ServiceCaller(this);
+        dataList = new ArrayList<>();
+        data = new Data();
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Upload Items Data...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        for (MyPojo myPojo : myPojoList) {
+            serviceCaller.callCheckoutItemsData(orderno, myPojo.getItem_code(), myPojo.getQuant(), new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                }
+            });
+        }
+        progressDialog.dismiss();
+        Toast.makeText(BasketActivity.this, "Order Create Successfully", Toast.LENGTH_LONG).show();
+        dbHelper.deleteAllBasketOrderData();
+        SharedPreferences sharedPreferences1 = getSharedPreferences("StoreData", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences1.edit();
+        editor.clear();
+        editor.apply();
+        Dialog dialog=new Dialog(BasketActivity.this);
+        dialog.setContentView(R.layout.custom_popup_layout);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        TextView tv=dialog.findViewById(R.id.item_txt);
+        Button btn_ok=dialog.findViewById(R.id.btn_ok);
+        tv.setText("Your Order no "+orderno+" is send to approval.");
+        dialog.show();
+        btn_ok.setOnClickListener(v->{
+            Intent intent = new Intent(BasketActivity.this, Main2Activity.class);
+            startActivity(intent);
+            finish();
+        });
+
     }
 }

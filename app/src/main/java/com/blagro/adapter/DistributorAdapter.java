@@ -8,21 +8,29 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.blagro.R;
 import com.blagro.activity.ViewDistributorOrderActivity;
 import com.blagro.model.MyPojo;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.MyViewHolder> {
+public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.MyViewHolder> implements Filterable {
     Context context;
     List<MyPojo> myPojoList;
+    boolean flag;
+    List<MyPojo> list;
 
-    public DistributorAdapter(Context context, List<MyPojo> myPojoList) {
+
+    public DistributorAdapter(Context context, List<MyPojo> myPojoList, boolean flag) {
         this.context = context;
+        this.list = myPojoList;
         this.myPojoList = myPojoList;
+        this.flag = flag;
     }
 
     @NonNull
@@ -34,23 +42,69 @@ public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
-        myViewHolder.item_name.setText("Distributor Name - " + myPojoList.get(i).getName());
-        myViewHolder.item_phone.setText("Phone Number -" + myPojoList.get(i).getMobile());
-        myViewHolder.item_email.setText("Email - " + myPojoList.get(i).getEmail());
-        myViewHolder.item_city.setText("City - " + myPojoList.get(i).getCity());
+        myViewHolder.item_name.setText("Distributor Name - " + list.get(i).getName());
+        myViewHolder.item_phone.setText("Phone Number -" + list.get(i).getMobile());
+        myViewHolder.item_email.setText("Email - " + list.get(i).getEmail());
+        myViewHolder.item_city.setText("City - " + list.get(i).getCity());
         myViewHolder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ViewDistributorOrderActivity.class);
-                intent.putExtra("DistributorId", myPojoList.get(i).getId());
-                context.startActivity(intent);
+                if (flag) {
+                    Intent intent = new Intent(context, ViewDistributorOrderActivity.class);
+                    intent.putExtra("DistributorId", list.get(i).getId());
+                    context.startActivity(intent);
+                }
             }
         });
     }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                list = (List<MyPojo>) results.values;
+                notifyDataSetChanged();
+            }
 
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<MyPojo> filteredResults = null;
+                if (constraint.length() == 0) {
+                    filteredResults = myPojoList;
+                } else {
+                    filteredResults = getFilteredResults(constraint.toString().toLowerCase());
+                }
+
+                FilterResults results = new FilterResults();
+                results.values = filteredResults;
+
+                return results;
+            }
+        };
+    }
+
+    protected List<MyPojo> getFilteredResults(String constraint) {
+        List<MyPojo> results = new ArrayList<>();
+
+        for (MyPojo item : myPojoList) {
+            if (item.getName().toLowerCase().contains(constraint)) {
+                results.add(item);
+            }
+            if (item.getMobile().toLowerCase().contains(constraint)) {
+                results.add(item);
+            }
+            if (item.getEmail().toLowerCase().contains(constraint)) {
+                results.add(item);
+            }
+            if (item.getCity().toLowerCase().contains(constraint)) {
+                results.add(item);
+            }
+        }
+        return results;
+    }
     @Override
     public int getItemCount() {
-        return myPojoList.size();
+        return list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -1,124 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/blur_bg"
-    tools:context=".activity.DistributorActivity">
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/toolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="?attr/actionBarSize"-->
-            <!--android:background="?attr/colorPrimary" >-->
-
-            <!--<RelativeLayout-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/app_name"-->
-                    <!--android:textColor="@color/colorWhite"-->
-                    <!--android:textSize="18sp"-->
-                    <!--android:textStyle="italic|bold"-->
-                    <!--android:layout_alignParentLeft="true"-->
-                    <!--android:layout_marginLeft="5dp"-->
-                    <!--android:gravity="center_vertical"-->
-                    <!--android:layout_centerVertical="true"/>-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:layout_alignParentRight="true"-->
-                    <!--android:layout_marginRight="10dp">-->
-
-                    <!--<com.blagro.utilities.CircleImageView-->
-                        <!--android:layout_width="30dp"-->
-                        <!--android:layout_height="30dp"-->
-                        <!--android:src="@drawable/default_circle"-->
-                        <!--android:layout_centerVertical="true"-->
-                        <!--android:layout_marginTop="2dp"-->
-                        <!--android:layout_gravity="center"/>-->
-
-                    <!--<TextView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="My Profile"-->
-                        <!--android:textColor="@color/colorWhite"-->
-                        <!--android:textSize="10sp"-->
-                        <!--android:textStyle="italic"-->
-                        <!--android:gravity="center_vertical"-->
-                        <!--android:layout_centerVertical="true"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:padding="2dp"/>-->
-
-                <!--</LinearLayout>-->
-
-            <!--</RelativeLayout>-->
-
-
-        <!--</android.support.v7.widget.Toolbar>-->
-
-
-    <!--</android.support.design.widget.AppBarLayout>-->
-
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select City"
-        android:textColor="@color/colorWhite"
-        android:textSize="16sp"
-        android:textStyle="bold|italic"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_margin="20dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/spinner_city"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/bg_spinne"
-        style="@style/Spinner">
-
-    </Spinner>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycle_distributorList"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp">
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:text="Select Area"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:textStyle="bold|italic" />
 
-        </android.support.v7.widget.RecyclerView>
+        <Spinner
+            android:id="@+id/spinner_area"
+            style="@style/Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/bg_spinne">
 
-        <ProgressBar
-            android:id="@+id/pb"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:indeterminateTint="@color/colorWhite"
-            android:indeterminate="true"
-            android:visibility="gone"/>
-
-    </RelativeLayout>
+        </Spinner>
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:text="Select City"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:textStyle="bold|italic" />
 
-</LinearLayout>
+        <Spinner
+            android:id="@+id/spinner_city"
+            style="@style/Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/bg_spinne">
+
+        </Spinner>
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_gravity="end"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            app:queryHint="search..." />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_distributorList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <ProgressBar
+                android:id="@+id/pb"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/colorWhite"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

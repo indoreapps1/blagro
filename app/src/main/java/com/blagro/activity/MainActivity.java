@@ -53,17 +53,10 @@ public class MainActivity extends AppCompatActivity {
     RelativeLayout layout_circle;
     TextView mMsgView;
 
-//    private ArrayList<String> permissionsToRequest;
-//    private ArrayList<String> permissionsRejected = new ArrayList<>();
-//    private ArrayList<String> permissions = new ArrayList<>();
-//    private final static int ALL_PERMISSIONS_RESULT = 101;
-//    LocationTrack locationTrack;
-
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ArrayList<String> permissions = new ArrayList<>();
     private static final String TAG = MainActivity.class.getSimpleName();
-//    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private final static int ALL_PERMISSIONS_RESULT = 101;
     private boolean mAlreadyStartedService = false;
     public String lon, lat;

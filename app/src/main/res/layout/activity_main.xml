@@ -231,20 +231,64 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/myorders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_retailer"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/cart_circle"
+            android:gravity="center"
+            android:textColor="@color/colorSkyBue"
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:src="@drawable/ic_format_list_numbered_black_24dp"
+            android:textColor="@color/colorSkyBue"
+            android:textStyle="bold|italic" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/myorders"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="My Orders"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        android:textStyle="bold|italic" />
+
     <TextView
         android:id="@+id/msgView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_margin="20dp"
         android:gravity="center"
         android:text="LatLong"
         android:textColor="@color/colorSkyBue"
         android:textSize="14sp"
         android:textStyle="bold|italic"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
 </RelativeLayout>

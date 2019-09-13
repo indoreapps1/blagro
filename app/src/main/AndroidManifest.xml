@@ -16,17 +16,19 @@
     <application
         android:name=".framework.AppController"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.ProductActivity"></activity>
         <activity android:name=".activity.Main2Activity"></activity>
         <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.ViewRetailerOrderActivity" />
         <activity android:name=".activity.ViewDistributorOrderActivity" />
         <activity android:name=".activity.DistributorActivity" />
+        <activity android:name=".activity.ViewMyOrderActivity" />
         <activity android:name=".activity.RetailerActivity" />
         <activity android:name=".activity.ProfileActivity" />
         <activity android:name=".activity.BasketActivity" />

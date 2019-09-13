@@ -19,7 +19,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="5dp">
-
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                android:padding="10dp"/>
             <TextView
                 android:id="@+id/item_no"
                 android:layout_width="match_parent"

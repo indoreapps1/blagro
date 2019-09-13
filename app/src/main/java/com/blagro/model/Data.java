@@ -5,6 +5,7 @@ public class Data {
     private int pro_id;
 
     private int qrt;
+    private String order_no;
 
     public int getProductId() {
         return pro_id;
@@ -20,5 +21,13 @@ public class Data {
 
     public void setProductQty(int productQty) {
         this.qrt = productQty;
+    }
+
+    public String getOrderNo() {
+        return order_no;
+    }
+
+    public void setOrderNo(String order_no) {
+        this.order_no = order_no;
     }
 }

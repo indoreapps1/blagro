@@ -1,6 +1,8 @@
 package com.blagro.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +14,6 @@ import android.widget.Toast;
 
 import com.blagro.R;
 import com.blagro.adapter.DistributorOrderAdapter;
-import com.blagro.adapter.RetailerOrderAdapter;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
 import com.blagro.model.MyPojo;
@@ -24,23 +25,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ViewDistributorOrderActivity extends AppCompatActivity {
+public class ViewMyOrderActivity extends AppCompatActivity {
 
     RecyclerView view_order_recycle;
-    int id;
     DistributorOrderAdapter distributorOrderAdapter;
     List<MyPojo> myPojoList;
     RadioGroup radio_grp;
     RadioButton Delivered, Approve, Pending, Cancel;
     String type = "Delivered";
     SearchView search;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_distributor_order);
+        setContentView(R.layout.activity_view_my_order);
         view_order_recycle = findViewById(R.id.view_order_recycle);
-        Bundle bundle = getIntent().getExtras();
-        id = bundle.getInt("DistributorId");
         init();
         setDistributorrOderData();
     }
@@ -51,7 +50,7 @@ public class ViewDistributorOrderActivity extends AppCompatActivity {
         Approve = findViewById(R.id.Approve);
         Pending = findViewById(R.id.Pending);
         Cancel = findViewById(R.id.Cancel);
-        search =findViewById(R.id.search);
+        search = findViewById(R.id.search);
         radio_grp.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -92,13 +91,15 @@ public class ViewDistributorOrderActivity extends AppCompatActivity {
         myPojoList = new ArrayList<>();
         myPojoList.clear();
         if (Utility.isOnline(this)) {
+            SharedPreferences sharedPreferences = getSharedPreferences("Login", Context.MODE_PRIVATE);
+            String empId = sharedPreferences.getString("Username", null);
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Loading " + type + " Orders...");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(this);
-            serviceCaller.callViewDistributorOrderData(id, type, new IAsyncWorkCompletedCallback() {
+            serviceCaller.callViewMyOrderData(empId, type, new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
@@ -111,20 +112,20 @@ public class ViewDistributorOrderActivity extends AppCompatActivity {
                                     setAdapter();
                                 } else {
                                     setAdapter();
-                                    Toast.makeText(ViewDistributorOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ViewMyOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 setAdapter();
-                                Toast.makeText(ViewDistributorOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ViewMyOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             setAdapter();
-                            Toast.makeText(ViewDistributorOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ViewMyOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
                         setAdapter();
-                        Toast.makeText(ViewDistributorOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ViewMyOrderActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -135,8 +136,8 @@ public class ViewDistributorOrderActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        distributorOrderAdapter = new DistributorOrderAdapter(ViewDistributorOrderActivity.this, myPojoList);
-        view_order_recycle.setLayoutManager(new LinearLayoutManager(ViewDistributorOrderActivity.this));
+        distributorOrderAdapter = new DistributorOrderAdapter(ViewMyOrderActivity.this, myPojoList);
+        view_order_recycle.setLayoutManager(new LinearLayoutManager(ViewMyOrderActivity.this));
         view_order_recycle.setAdapter(distributorOrderAdapter);
     }
 }

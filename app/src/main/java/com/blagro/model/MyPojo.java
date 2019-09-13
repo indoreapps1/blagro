@@ -4,25 +4,21 @@ public class MyPojo {
 
     private String city;
 
-    public String getCity ()
-    {
+    public String getCity() {
         return city;
     }
 
-    public void setCity (String city)
-    {
+    public void setCity(String city) {
         this.city = city;
     }
 
     private String category;
 
-    public String getCategory ()
-    {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory (String category)
-    {
+    public void setCategory(String category) {
         this.category = category;
     }
 
@@ -33,68 +29,85 @@ public class MyPojo {
     private String unit;
 
     private String name;
+    private String dname;
+    private String rname;
 
     private String gst;
+    private String sub_cat;
 
     private int id;
 
-    public String getP ()
-    {
+    public String getSubCat() {
+        return sub_cat;
+    }
+
+    public void setSubCat(String sub_cat) {
+        this.sub_cat = sub_cat;
+    }
+
+
+    public String getP() {
         return p;
     }
 
-    public void setP (String p)
-    {
+    public void setP(String p) {
         this.p = p;
     }
 
-    public String getItem_code ()
-    {
+    public String getItem_code() {
         return item_code;
     }
 
-    public void setItem_code (String item_code)
-    {
+    public void setItem_code(String item_code) {
         this.item_code = item_code;
     }
 
-    public String getUnit ()
-    {
+    public String getUnit() {
         return unit;
     }
 
-    public void setUnit (String unit)
-    {
+    public void setUnit(String unit) {
         this.unit = unit;
     }
 
-    public String getName ()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName (String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getGst ()
-    {
+
+    public String getDName() {
+        return dname;
+    }
+
+    public void setDName(String dname) {
+        this.dname = dname;
+    }
+
+    public String getRName() {
+        return rname;
+    }
+
+    public void setRName(String rname) {
+        this.rname = rname;
+    }
+
+    public String getGst() {
         return gst;
     }
 
-    public void setGst (String gst)
-    {
+    public void setGst(String gst) {
         this.gst = gst;
     }
 
-    public int getId ()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId (int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -119,7 +132,6 @@ public class MyPojo {
     }
 
 
-
     private String password;
 
     private String mobile;
@@ -128,44 +140,36 @@ public class MyPojo {
 
     private String email;
 
-    public String getPassword ()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword (String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
 
-    public String getMobile ()
-    {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile (String mobile)
-    {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
-    public String getType ()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType (String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getEmail ()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail (String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -183,73 +187,59 @@ public class MyPojo {
 
     private String emp_id;
 
-    public String getArea ()
-    {
+    public String getArea() {
         return area;
     }
 
-    public void setArea (String area)
-    {
+    public void setArea(String area) {
         this.area = area;
     }
 
-    public String getEmp_code ()
-    {
+    public String getEmp_code() {
         return emp_code;
     }
 
-    public void setEmp_code (String emp_code)
-    {
+    public void setEmp_code(String emp_code) {
         this.emp_code = emp_code;
     }
 
-    public String getEmp_name ()
-    {
+    public String getEmp_name() {
         return emp_name;
     }
 
-    public void setEmp_name (String emp_name)
-    {
+    public void setEmp_name(String emp_name) {
         this.emp_name = emp_name;
     }
 
-    public String getMobile_n ()
-    {
+    public String getMobile_n() {
         return mobile_n;
     }
 
-    public void setMobile_n (String mobile_n)
-    {
+    public void setMobile_n(String mobile_n) {
         this.mobile_n = mobile_n;
     }
 
-    public String getEmpa_code ()
-    {
+    public String getEmpa_code() {
         return empa_code;
     }
 
-    public void setEmpa_code (String empa_code)
-    {
+    public void setEmpa_code(String empa_code) {
         this.empa_code = empa_code;
     }
 
-    public String getDesignation ()
-    {
+    public String getDesignation() {
         return designation;
     }
 
-    public void setDesignation (String designation)
-    {
+    public void setDesignation(String designation) {
         this.designation = designation;
     }
 
-    public String getEmp_id ()
-    {
+    public String getEmp_id() {
         return emp_id;
     }
 
-    public void setEmp_id (String emp_id)
-    {
+    public void setEmp_id(String emp_id) {
         this.emp_id = emp_id;
     }
 
@@ -263,53 +253,43 @@ public class MyPojo {
 
     private String order_id;
 
-    public int getOrder_no ()
-    {
+    public int getOrder_no() {
         return order_no;
     }
 
-    public void setOrder_no (int order_no)
-    {
+    public void setOrder_no(int order_no) {
         this.order_no = order_no;
     }
 
-    public String getDate ()
-    {
+    public String getDate() {
         return date;
     }
 
-    public void setDate (String date)
-    {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public String getDistributor_id ()
-    {
+    public String getDistributor_id() {
         return distributor_id;
     }
 
-    public void setDistributor_id (String distributor_id)
-    {
+    public void setDistributor_id(String distributor_id) {
         this.distributor_id = distributor_id;
     }
 
-    public String getRetailer_id ()
-    {
+    public String getRetailer_id() {
         return retailer_id;
     }
 
-    public void setRetailer_id (String retailer_id)
-    {
+    public void setRetailer_id(String retailer_id) {
         this.retailer_id = retailer_id;
     }
 
-    public String getOrder_id ()
-    {
+    public String getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id (String order_id)
-    {
+    public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
 
@@ -318,23 +298,19 @@ public class MyPojo {
     private String pro_id;
 
 
-    public String getQrt ()
-    {
+    public String getQrt() {
         return qrt;
     }
 
-    public void setQrt (String qrt)
-    {
+    public void setQrt(String qrt) {
         this.qrt = qrt;
     }
 
-    public String getPro_id ()
-    {
+    public String getPro_id() {
         return pro_id;
     }
 
-    public void setPro_id (String pro_id)
-    {
+    public void setPro_id(String pro_id) {
         this.pro_id = pro_id;
     }
 

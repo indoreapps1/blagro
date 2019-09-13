@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -30,6 +34,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.google.code.gson:gson:2.2.4'
-    implementation 'com.google.android.gms:play-services-location:11.0.1'
-
+    // location play services
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+// dexter runtime permissions
+    implementation 'com.karumi:dexter:4.2.0'
 }

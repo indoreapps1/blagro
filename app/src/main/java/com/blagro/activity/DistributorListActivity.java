@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.blagro.R;
+import com.blagro.adapter.AreaAdapter;
 import com.blagro.adapter.DistributorAdapter;
 import com.blagro.framework.IAsyncWorkCompletedCallback;
 import com.blagro.framework.ServiceCaller;
@@ -28,14 +30,15 @@ import java.util.List;
 public class DistributorListActivity extends AppCompatActivity {
 
     RecyclerView recycle_distributorList;
-    Spinner spinner_city;
-    ArrayList<String> arrayList;
-    List<MyPojo> myPojoList, distributorPojoList;
+    Spinner spinner_city, spinner_area;
+    ArrayList<String> arrayList, areaList;
+    List<MyPojo> myPojoList, distributorPojoList, areaPojoList;
     ArrayAdapter arrayAdapter;
     DistributorAdapter distributorAdapter;
     ProgressBar pb;
     String sCity;
-
+    int aArea;
+    SearchView search;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +49,27 @@ public class DistributorListActivity extends AppCompatActivity {
     private void init() {
         recycle_distributorList = findViewById(R.id.recycle_distributorList);
         spinner_city = findViewById(R.id.spinner_city);
+        spinner_area = findViewById(R.id.spinner_area);
         pb = findViewById(R.id.pb);
-        setSpinnerData();
+        search =findViewById(R.id.search);
+        getAreaData();
+        spinner_area.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    aArea = areaPojoList.get(position).getId();
+//                  aArea = parent.getSelectedItem().toString();
+                    setSpinnerData();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         spinner_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -60,6 +82,56 @@ public class DistributorListActivity extends AppCompatActivity {
 
             }
         });
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String text) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+                if (distributorAdapter != null) {
+                    distributorAdapter.getFilter().filter(text);
+                }
+                return true;
+            }
+
+        });
+    }
+
+    private void getAreaData() {
+        areaPojoList = new ArrayList<MyPojo>();
+        areaPojoList.clear();
+        if (Utility.isOnline(this)) {
+            ServiceCaller serviceCaller = new ServiceCaller(DistributorListActivity.this);
+            serviceCaller.callAreaListService(new IAsyncWorkCompletedCallback() {
+                @Override
+                public void onDone(String workName, boolean isComplete) {
+                    if (isComplete) {
+                        if (!workName.trim().equalsIgnoreCase("no")) {
+                            MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
+                            if (myPojos != null) {
+                                areaPojoList.addAll(Arrays.asList(myPojos));
+                                if (areaPojoList != null && areaPojoList.size() > 0) {
+                                    AreaAdapter arrayAdapter = new AreaAdapter(DistributorListActivity.this, android.R.layout.simple_dropdown_item_1line, R.id.item_txt, areaPojoList);
+                                    spinner_area.setAdapter(arrayAdapter);
+                                }
+                            } else {
+                                Toast.makeText(DistributorListActivity.this, "No Area Found", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(DistributorListActivity.this, "No Area Found", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        } else {
+            Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private List<String> setSpinnerData() {
@@ -72,7 +144,7 @@ public class DistributorListActivity extends AppCompatActivity {
             progressDialog.setMessage("Fetching Cities...");
             progressDialog.show();
             ServiceCaller serviceCaller = new ServiceCaller(DistributorListActivity.this);
-            serviceCaller.callCityListService(new IAsyncWorkCompletedCallback() {
+            serviceCaller.callCityListService(String.valueOf(aArea), new IAsyncWorkCompletedCallback() {
                 @Override
                 public void onDone(String workName, boolean isComplete) {
                     progressDialog.dismiss();
@@ -92,14 +164,20 @@ public class DistributorListActivity extends AppCompatActivity {
                                     }
                                 }
                             } else {
+                                arrayAdapter = new ArrayAdapter(DistributorListActivity.this, android.R.layout.simple_list_item_1, arrayList);
+                                spinner_city.setAdapter(arrayAdapter);
                                 Toast.makeText(DistributorListActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                             }
 
                         } else {
+                            arrayAdapter = new ArrayAdapter(DistributorListActivity.this, android.R.layout.simple_list_item_1, arrayList);
+                            spinner_city.setAdapter(arrayAdapter);
                             Toast.makeText(DistributorListActivity.this, "No City Found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(DistributorListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        arrayAdapter = new ArrayAdapter(DistributorListActivity.this, android.R.layout.simple_list_item_1, arrayList);
+                        spinner_city.setAdapter(arrayAdapter);
+                        Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -129,24 +207,22 @@ public class DistributorListActivity extends AppCompatActivity {
                                 MyPojo[] myPojos = new Gson().fromJson(workName, MyPojo[].class);
                                 if (myPojos != null) {
                                     distributorPojoList.addAll(Arrays.asList(myPojos));
-                                    if (distributorPojoList != null) {
-                                        distributorAdapter = new DistributorAdapter(DistributorListActivity.this, distributorPojoList);
-                                        recycle_distributorList.setLayoutManager(new LinearLayoutManager(DistributorListActivity.this));
-                                        recycle_distributorList.setAdapter(distributorAdapter);
-                                    } else {
-                                        Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
-                                    }
+                                    setAdapter();
                                 } else {
+                                    setAdapter();
                                     Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
+                                setAdapter();
                                 Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                             }
-                        }else {
+                        } else {
+                            setAdapter();
                             Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(DistributorListActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        setAdapter();
+                        Toast.makeText(DistributorListActivity.this, "No Data Found", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -154,5 +230,11 @@ public class DistributorListActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, Contants.OFFLINE_MESSAGE, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setAdapter() {
+        distributorAdapter = new DistributorAdapter(DistributorListActivity.this, distributorPojoList,false);
+        recycle_distributorList.setLayoutManager(new LinearLayoutManager(DistributorListActivity.this));
+        recycle_distributorList.setAdapter(distributorAdapter);
     }
 }

@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
                 SharedPreferences sharedPreferences=getSharedPreferences("Login", Context.MODE_PRIVATE);
                 username=sharedPreferences.getString("Username", null);
                 if (username!=null){
-                    Intent intent=new Intent(SplashActivity.this, MainActivity.class);
+                    Intent intent=new Intent(SplashActivity.this, Main2Activity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();

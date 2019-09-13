@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.blagro.R;
 import com.blagro.activity.CreateOrderActivity;
 import com.blagro.activity.MainActivity;
+import com.blagro.activity.ProductActivity;
 import com.blagro.database.DbHelper;
 import com.blagro.model.MyPojo;
 
@@ -34,6 +35,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public void setActionListener(ProductItemActionListener actionListener) {
         this.actionListener = actionListener;
     }
+
     @Override
     public int getItemViewType(int position) {
         return position;
@@ -43,6 +45,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
     public long getItemId(int position) {
         return position;
     }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int i) {
@@ -81,7 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         myViewHolder.textView_addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CreateOrderActivity rootActivity = (CreateOrderActivity) context;
+                final ProductActivity rootActivity = (ProductActivity) context;
                 if (rootActivity != null) {
                     addItemToCart(i, myViewHolder);
                     Vibrator vb = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -104,6 +107,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
         myBasket.setUnit(myPojoList.get(position).getUnit());
         myBasket.setQuant(Integer.parseInt(myViewHolder.textView_nos.getText().toString()));
         myBasket.setGst(myPojoList.get(position).getGst());
+        myBasket.setItem_code(myPojoList.get(position).getItem_code());
         dbHelper.upsertBasketOrderData(myBasket);
         notifyDataSetChanged();
         Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();

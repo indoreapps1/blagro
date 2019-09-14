@@ -39,14 +39,20 @@ public class DistributorOrderAdapter extends RecyclerView.Adapter<DistributorOrd
 
     @Override
     public void onBindViewHolder(@NonNull DistributorOrderAdapter.MyViewHolder myViewHolder, final int i) {
-        myViewHolder.item_name.setText("Distributor - " + list.get(i).getDName() + "\n" + "Retailer - " + list.get(i).getRName());
+        myViewHolder.item_name.setText("Distributor - " + list.get(i).getDName());
+        myViewHolder.item_rname.setText("Retailer - " + list.get(i).getRName());
         myViewHolder.item_no.setText("Order Number - " + list.get(i).getOrder_no());
-        myViewHolder.item_time.setText("Order Date - " + list.get(i).getDate());
+        myViewHolder.item_time.setText("" + list.get(i).getDate());
+        myViewHolder.qty.setText("Order Qty - " + list.get(i).getOrderQty());
         myViewHolder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, OrderActivity.class);
                 intent.putExtra("orderNo", list.get(i).getOrder_no());
+                intent.putExtra("date", list.get(i).getDate());
+                intent.putExtra("address", list.get(i).getAddress());
+                intent.putExtra("dname", list.get(i).getDName());
+                intent.putExtra("rname", list.get(i).getRName());
                 context.startActivity(intent);
             }
         });
@@ -105,7 +111,7 @@ public class DistributorOrderAdapter extends RecyclerView.Adapter<DistributorOrd
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView item_no, item_time, item_name;
+        TextView item_no, item_time, item_name, qty, item_rname;
         CardView item_card;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -114,6 +120,8 @@ public class DistributorOrderAdapter extends RecyclerView.Adapter<DistributorOrd
             item_time = itemView.findViewById(R.id.item_time);
             item_name = itemView.findViewById(R.id.item_name);
             item_card = itemView.findViewById(R.id.item_card);
+            qty = itemView.findViewById(R.id.qty);
+            item_rname = itemView.findViewById(R.id.item_rname);
         }
     }
 }

@@ -17,8 +17,8 @@ import com.blagro.model.MyPojo;
 import java.util.List;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder> {
-   private Context context;
-   private List<MyPojo> myPojoList;
+    private Context context;
+    private List<MyPojo> myPojoList;
 
     public OrderAdapter(Context context, List<MyPojo> myPojoList) {
         this.context = context;
@@ -35,17 +35,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
         myViewHolder.txt_category.setText("Product Category - " + myPojoList.get(i).getCategory());
-        myViewHolder.txt_product.setText("Product -" + myPojoList.get(i).getName());
-        myViewHolder.txt_quantity.setText("Quantity - " + myPojoList.get(i).getQrt()+" ("+myPojoList.get(i).getUnit()+")");
-        myViewHolder.txt_gst.setText("GST - " + myPojoList.get(i).getGst());
-        myViewHolder.card_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(context, ViewDistributorOrderActivity.class);
-//                intent.putExtra("DistributorId", myPojoList.get(i).getId());
-//                context.startActivity(intent);
-            }
-        });
+        myViewHolder.txt_product.setText("" + myPojoList.get(i).getName());
+        myViewHolder.txt_quantity.setText("" + myPojoList.get(i).getQrt() + " (" + myPojoList.get(i).getUnit() + ")");
+        myViewHolder.txt_gst.setText("" + myPojoList.get(i).getGst());
+        myViewHolder.rate.setText("" + myPojoList.get(i).getRate());
+        myViewHolder.amount.setText("" + myPojoList.get(i).getAmount());
     }
 
     @Override
@@ -54,8 +48,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txt_category, txt_product, txt_quantity, txt_gst;
-        CardView card_view;
+        TextView txt_category, txt_product, txt_quantity, txt_gst, rate, amount;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -63,7 +56,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             txt_product = itemView.findViewById(R.id.txt_product);
             txt_quantity = itemView.findViewById(R.id.txt_quantity);
             txt_gst = itemView.findViewById(R.id.txt_gst);
-            card_view = itemView.findViewById(R.id.card_view);
+            rate = itemView.findViewById(R.id.rate);
+            amount = itemView.findViewById(R.id.amount);
         }
     }
 }

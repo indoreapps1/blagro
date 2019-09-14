@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blagro.R;
 import com.blagro.activity.ViewDistributorOrderActivity;
@@ -46,6 +47,7 @@ public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.
         myViewHolder.item_phone.setText("Phone Number -" + list.get(i).getMobile());
         myViewHolder.item_email.setText("Email - " + list.get(i).getEmail());
         myViewHolder.item_city.setText("City - " + list.get(i).getCity());
+        myViewHolder.item_address.setText("Area - " + list.get(i).getArea()+" , "+"Address - " + list.get(i).getAddress());
         myViewHolder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +59,7 @@ public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.
             }
         });
     }
+
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -102,13 +105,14 @@ public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.
         }
         return results;
     }
+
     @Override
     public int getItemCount() {
         return list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView item_name, item_phone, item_email, item_city;
+        TextView item_name, item_phone, item_email, item_city, item_address;
         CardView item_card;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -118,6 +122,7 @@ public class DistributorAdapter extends RecyclerView.Adapter<DistributorAdapter.
             item_email = itemView.findViewById(R.id.item_email);
             item_city = itemView.findViewById(R.id.item_city);
             item_card = itemView.findViewById(R.id.item_card);
+            item_address = itemView.findViewById(R.id.item_address);
         }
     }
 }

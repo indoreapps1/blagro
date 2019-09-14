@@ -31,6 +31,7 @@ public class MyPojo {
     private String name;
     private String dname;
     private String rname;
+    private String address;
 
     private String gst;
     private String sub_cat;
@@ -76,6 +77,43 @@ public class MyPojo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    private String OrderQty;
+    private String rate;
+    private String amount;
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getOrderQty() {
+        return OrderQty;
+    }
+
+    public void setOrderQty(String OrderQty) {
+        this.OrderQty = OrderQty;
     }
 
 

@@ -39,19 +39,26 @@ public class RetailerOrderAdapter extends RecyclerView.Adapter<RetailerOrderAdap
 
     @Override
     public void onBindViewHolder(@NonNull RetailerOrderAdapter.MyViewHolder myViewHolder, final int i) {
-        myViewHolder.item_name.setText("Distributor - " + list.get(i).getDName() + "\n" + "Retailer - " + list.get(i).getRName());
+        myViewHolder.item_name.setText("Distributor - " + list.get(i).getDName());
+        myViewHolder.item_rname.setText("Retailer - " + list.get(i).getRName());
         myViewHolder.item_no.setText("Order Number - " + list.get(i).getOrder_no());
-        myViewHolder.item_time.setText("Order Date - " + list.get(i).getDate());
+        myViewHolder.item_time.setText("" + list.get(i).getDate());
+        myViewHolder.qty.setText("Order Qty - " + list.get(i).getOrderQty());
         myViewHolder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, OrderActivity.class);
                 intent.putExtra("orderNo", list.get(i).getOrder_no());
+                intent.putExtra("date", list.get(i).getDate());
+                intent.putExtra("address", list.get(i).getAddress());
+                intent.putExtra("dname", list.get(i).getDName());
+                intent.putExtra("rname", list.get(i).getRName());
                 context.startActivity(intent);
             }
         });
 
     }
+
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -97,13 +104,14 @@ public class RetailerOrderAdapter extends RecyclerView.Adapter<RetailerOrderAdap
         }
         return results;
     }
+
     @Override
     public int getItemCount() {
         return list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView item_no, item_time, item_name;
+        TextView item_no, item_time, item_name, qty, item_rname;
         CardView item_card;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -112,6 +120,8 @@ public class RetailerOrderAdapter extends RecyclerView.Adapter<RetailerOrderAdap
             item_time = itemView.findViewById(R.id.item_time);
             item_card = itemView.findViewById(R.id.item_card);
             item_name = itemView.findViewById(R.id.item_name);
+            qty = itemView.findViewById(R.id.qty);
+            item_rname = itemView.findViewById(R.id.item_rname);
         }
     }
 }
